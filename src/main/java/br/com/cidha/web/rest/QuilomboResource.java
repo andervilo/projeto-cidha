@@ -1,7 +1,7 @@
 package br.com.cidha.web.rest;
 
+import br.com.cidha.domain.Quilombo;
 import br.com.cidha.service.QuilomboService;
-import br.com.cidha.service.dto.QuilomboDTO;
 import br.com.cidha.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -43,17 +43,17 @@ public class QuilomboResource {
     /**
      * {@code POST  /quilombos} : Create a new quilombo.
      *
-     * @param quilomboDTO the quilomboDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new quilomboDTO, or with status {@code 400 (Bad Request)} if the quilombo has already an ID.
+     * @param quilombo the quilombo to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new quilombo, or with status {@code 400 (Bad Request)} if the quilombo has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/quilombos")
-    public ResponseEntity<QuilomboDTO> createQuilombo(@RequestBody QuilomboDTO quilomboDTO) throws URISyntaxException {
-        log.debug("REST request to save Quilombo : {}", quilomboDTO);
-        if (quilomboDTO.getId() != null) {
+    public ResponseEntity<Quilombo> createQuilombo(@RequestBody Quilombo quilombo) throws URISyntaxException {
+        log.debug("REST request to save Quilombo : {}", quilombo);
+        if (quilombo.getId() != null) {
             throw new BadRequestAlertException("A new quilombo cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        QuilomboDTO result = quilomboService.save(quilomboDTO);
+        Quilombo result = quilomboService.save(quilombo);
         return ResponseEntity
             .created(new URI("/api/quilombos/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -63,22 +63,22 @@ public class QuilomboResource {
     /**
      * {@code PUT  /quilombos} : Updates an existing quilombo.
      *
-     * @param quilomboDTO the quilomboDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated quilomboDTO,
-     * or with status {@code 400 (Bad Request)} if the quilomboDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the quilomboDTO couldn't be updated.
+     * @param quilombo the quilombo to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated quilombo,
+     * or with status {@code 400 (Bad Request)} if the quilombo is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the quilombo couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/quilombos")
-    public ResponseEntity<QuilomboDTO> updateQuilombo(@RequestBody QuilomboDTO quilomboDTO) throws URISyntaxException {
-        log.debug("REST request to update Quilombo : {}", quilomboDTO);
-        if (quilomboDTO.getId() == null) {
+    public ResponseEntity<Quilombo> updateQuilombo(@RequestBody Quilombo quilombo) throws URISyntaxException {
+        log.debug("REST request to update Quilombo : {}", quilombo);
+        if (quilombo.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        QuilomboDTO result = quilomboService.save(quilomboDTO);
+        Quilombo result = quilomboService.save(quilombo);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, quilomboDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, quilombo.getId().toString()))
             .body(result);
     }
 
@@ -89,9 +89,9 @@ public class QuilomboResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of quilombos in body.
      */
     @GetMapping("/quilombos")
-    public ResponseEntity<List<QuilomboDTO>> getAllQuilombos(Pageable pageable) {
+    public ResponseEntity<List<Quilombo>> getAllQuilombos(Pageable pageable) {
         log.debug("REST request to get a page of Quilombos");
-        Page<QuilomboDTO> page = quilomboService.findAll(pageable);
+        Page<Quilombo> page = quilomboService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -99,20 +99,20 @@ public class QuilomboResource {
     /**
      * {@code GET  /quilombos/:id} : get the "id" quilombo.
      *
-     * @param id the id of the quilomboDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the quilomboDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the quilombo to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the quilombo, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/quilombos/{id}")
-    public ResponseEntity<QuilomboDTO> getQuilombo(@PathVariable Long id) {
+    public ResponseEntity<Quilombo> getQuilombo(@PathVariable Long id) {
         log.debug("REST request to get Quilombo : {}", id);
-        Optional<QuilomboDTO> quilomboDTO = quilomboService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(quilomboDTO);
+        Optional<Quilombo> quilombo = quilomboService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(quilombo);
     }
 
     /**
      * {@code DELETE  /quilombos/:id} : delete the "id" quilombo.
      *
-     * @param id the id of the quilomboDTO to delete.
+     * @param id the id of the quilombo to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/quilombos/{id}")

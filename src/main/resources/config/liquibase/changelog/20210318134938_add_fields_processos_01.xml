@@ -1,0 +1,44 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.9.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <changeSet author="ander (generated)" id="1616075395984-2">
+        <addColumn tableName="processo">
+            <column name="link_trf" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="ander (generated)" id="1616075395984-3">
+        <addColumn tableName="processo">
+            <column name="numero_processo_administrativo" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="ander (generated)" id="1616075395984-4">
+        <addColumn tableName="processo">
+            <column name="numero_processo_judicial_primeira_instancia" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="ander (generated)" id="1616075395984-5">
+        <addColumn tableName="processo">
+            <column name="numero_processo_judicial_primeira_instancia_link" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="ander (generated)" id="1616075395984-6">
+        <addColumn tableName="processo">
+            <column name="numero_processo_judicial_primeira_instancia_observacoes" type="text"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="ander (generated)" id="1616075395984-7">
+        <addColumn tableName="processo">
+            <column name="subsecao_judiciaria" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="ander (generated)" id="1616075395984-8">
+        <addColumn tableName="processo">
+            <column name="turma_trf_1" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="ander (generated)" id="1616075395984-9">
+        <dropColumn columnName="secao_judiciaria" tableName="processo"/>
+    </changeSet>
+    <changeSet author="ander (generated)" id="1616075395984-1">
+        <alterSequence sequenceName="sequence_generator"/>
+    </changeSet>
+</databaseChangeLog>

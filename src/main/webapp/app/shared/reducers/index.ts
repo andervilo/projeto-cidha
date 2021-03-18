@@ -24,6 +24,10 @@ import quilombo, {
 import processo, {
   ProcessoState
 } from 'app/entities/processo/processo.reducer';
+// prettier-ignore
+import concessaoLiminar, {
+  ConcessaoLiminarState
+} from 'app/entities/concessao-liminar/concessao-liminar.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
@@ -40,6 +44,7 @@ export interface IRootState {
   readonly comarca: ComarcaState;
   readonly quilombo: QuilomboState;
   readonly processo: ProcessoState;
+  readonly concessaoLiminar: ConcessaoLiminarState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -58,6 +63,7 @@ const rootReducer = combineReducers<IRootState>({
   comarca,
   quilombo,
   processo,
+  concessaoLiminar,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
 });

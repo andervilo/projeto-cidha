@@ -44,11 +44,63 @@ export const ProcessoDetail = (props: IProcessoDetailProps) => {
           </dt>
           <dd>{processoEntity.linkUnico}</dd>
           <dt>
-            <span id="secaoJudiciaria">
-              <Translate contentKey="cidhaApp.processo.secaoJudiciaria">Secao Judiciaria</Translate>
+            <span id="linkTrf">
+              <Translate contentKey="cidhaApp.processo.linkTrf">Link Trf</Translate>
             </span>
           </dt>
-          <dd>{processoEntity.secaoJudiciaria}</dd>
+          <dd>{processoEntity.linkTrf}</dd>
+          <dt>
+            <span id="subsecaoJudiciaria">
+              <Translate contentKey="cidhaApp.processo.subsecaoJudiciaria">Subsecao Judiciaria</Translate>
+            </span>
+          </dt>
+          <dd>{processoEntity.subsecaoJudiciaria}</dd>
+          <dt>
+            <span id="turmaTrf1">
+              <Translate contentKey="cidhaApp.processo.turmaTrf1">Turma Trf 1</Translate>
+            </span>
+          </dt>
+          <dd>{processoEntity.turmaTrf1}</dd>
+          <dt>
+            <span id="numeroProcessoAdministrativo">
+              <Translate contentKey="cidhaApp.processo.numeroProcessoAdministrativo">Numero Processo Administrativo</Translate>
+            </span>
+          </dt>
+          <dd>{processoEntity.numeroProcessoAdministrativo}</dd>
+          <dt>
+            <span id="numeroProcessoJudicialPrimeiraInstancia">
+              <Translate contentKey="cidhaApp.processo.numeroProcessoJudicialPrimeiraInstancia">
+                Numero Processo Judicial Primeira Instancia
+              </Translate>
+            </span>
+          </dt>
+          <dd>{processoEntity.numeroProcessoJudicialPrimeiraInstancia}</dd>
+          <dt>
+            <span id="numeroProcessoJudicialPrimeiraInstanciaLink">
+              <Translate contentKey="cidhaApp.processo.numeroProcessoJudicialPrimeiraInstanciaLink">
+                Numero Processo Judicial Primeira Instancia Link
+              </Translate>
+            </span>
+          </dt>
+          <dd>{processoEntity.numeroProcessoJudicialPrimeiraInstanciaLink}</dd>
+          <dt>
+            <span id="numeroProcessoJudicialPrimeiraInstanciaObservacoes">
+              <Translate contentKey="cidhaApp.processo.numeroProcessoJudicialPrimeiraInstanciaObservacoes">
+                Numero Processo Judicial Primeira Instancia Observacoes
+              </Translate>
+            </span>
+          </dt>
+          <dd>{processoEntity.numeroProcessoJudicialPrimeiraInstanciaObservacoes}</dd>
+          <dt>
+            <span id="parecer">
+              <Translate contentKey="cidhaApp.processo.parecer">Parecer</Translate>
+            </span>
+          </dt>
+          <dd>{processoEntity.parecer ? 'true' : 'false'}</dd>
+          <dt>
+            <Translate contentKey="cidhaApp.processo.concessaoLiminar">Concessao Liminar</Translate>
+          </dt>
+          <dd>{processoEntity.concessaoLiminar ? processoEntity.concessaoLiminar.id : ''}</dd>
           <dt>
             <Translate contentKey="cidhaApp.processo.comarca">Comarca</Translate>
           </dt>

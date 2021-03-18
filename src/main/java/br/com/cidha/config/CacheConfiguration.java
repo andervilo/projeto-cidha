@@ -54,6 +54,7 @@ public class CacheConfiguration {
             createCache(cm, br.com.cidha.domain.Processo.class.getName());
             createCache(cm, br.com.cidha.domain.Processo.class.getName() + ".comarcas");
             createCache(cm, br.com.cidha.domain.Processo.class.getName() + ".quilombos");
+            createCache(cm, br.com.cidha.domain.ConcessaoLiminar.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

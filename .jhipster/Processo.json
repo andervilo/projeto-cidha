@@ -15,11 +15,47 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "secaoJudiciaria",
+      "fieldName": "linkTrf",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "subsecaoJudiciaria",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "turmaTrf1",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "numeroProcessoAdministrativo",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "numeroProcessoJudicialPrimeiraInstancia",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "numeroProcessoJudicialPrimeiraInstanciaLink",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "numeroProcessoJudicialPrimeiraInstanciaObservacoes",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "parecer",
+      "fieldType": "Boolean"
     }
   ],
   "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "concessaoLiminar",
+      "otherEntityRelationshipName": "processo",
+      "relationshipName": "concessaoLiminar",
+      "otherEntityField": "id"
+    },
     {
       "relationshipType": "many-to-many",
       "otherEntityName": "comarca",
@@ -39,7 +75,7 @@
   ],
   "changelogDate": "20210318131307",
   "entityTableName": "processo",
-  "dto": "mapstruct",
+  "dto": "no",
   "pagination": "pagination",
   "service": "serviceClass",
   "jpaMetamodelFiltering": false,

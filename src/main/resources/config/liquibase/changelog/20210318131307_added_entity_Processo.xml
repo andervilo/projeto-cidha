@@ -24,7 +24,31 @@
             <column name="link_unico" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="secao_judiciaria" type="varchar(255)">
+            <column name="link_trf" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="subsecao_judiciaria" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="turma_trf_1" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="numero_processo_administrativo" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="numero_processo_judicial_primeira_instancia" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="numero_processo_judicial_primeira_instancia_link" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="numero_processo_judicial_primeira_instancia_observacoes" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="parecer" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="concessao_liminar_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -75,7 +99,14 @@
             <column name="oficio" type="string"/>
             <column name="assunto" type="clob"/>
             <column name="link_unico" type="string"/>
-            <column name="secao_judiciaria" type="string"/>
+            <column name="link_trf" type="string"/>
+            <column name="subsecao_judiciaria" type="string"/>
+            <column name="turma_trf_1" type="string"/>
+            <column name="numero_processo_administrativo" type="string"/>
+            <column name="numero_processo_judicial_primeira_instancia" type="string"/>
+            <column name="numero_processo_judicial_primeira_instancia_link" type="string"/>
+            <column name="numero_processo_judicial_primeira_instancia_observacoes" type="clob"/>
+            <column name="parecer" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

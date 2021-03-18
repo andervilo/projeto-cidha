@@ -1,0 +1,28 @@
+entity Processo
+ {
+    id Long required,
+    oficio String,
+    assunto TextBlob,
+    linkUnico String,
+    linkTrf String,
+    subsecaoJudiciaria String,
+    turmaTrf1 String,
+    numeroProcessoAdministrativo String,
+    numeroProcessoJudicialPrimeiraInstancia String,
+    numeroProcessoJudicialPrimeiraInstanciaLink String,
+    numeroProcessoJudicialPrimeiraInstanciaObservacoes TextBlob,
+    parecer Boolean
+}
+
+paginate Processo with pagination
+//dto Processo with mapstruct
+service Processo with serviceClass
+
+relationship ManyToOne {
+	Processo{concessaoLiminar} to ConcessaoLiminar
+}
+
+relationship ManyToMany {
+  Processo{comarca(nome)} to Comarca{processo(oficio)}
+  Processo{quilombo(nome)} to Quilombo{processo(oficio)}
+}

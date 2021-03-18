@@ -1,7 +1,9 @@
 package br.com.cidha.web.rest;
 
+import br.com.cidha.domain.Comarca;
+import br.com.cidha.service.ComarcaQueryService;
 import br.com.cidha.service.ComarcaService;
-import br.com.cidha.service.dto.ComarcaDTO;
+import br.com.cidha.service.dto.ComarcaCriteria;
 import br.com.cidha.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -36,24 +38,27 @@ public class ComarcaResource {
 
     private final ComarcaService comarcaService;
 
-    public ComarcaResource(ComarcaService comarcaService) {
+    private final ComarcaQueryService comarcaQueryService;
+
+    public ComarcaResource(ComarcaService comarcaService, ComarcaQueryService comarcaQueryService) {
         this.comarcaService = comarcaService;
+        this.comarcaQueryService = comarcaQueryService;
     }
 
     /**
      * {@code POST  /comarcas} : Create a new comarca.
      *
-     * @param comarcaDTO the comarcaDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new comarcaDTO, or with status {@code 400 (Bad Request)} if the comarca has already an ID.
+     * @param comarca the comarca to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new comarca, or with status {@code 400 (Bad Request)} if the comarca has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/comarcas")
-    public ResponseEntity<ComarcaDTO> createComarca(@RequestBody ComarcaDTO comarcaDTO) throws URISyntaxException {
-        log.debug("REST request to save Comarca : {}", comarcaDTO);
-        if (comarcaDTO.getId() != null) {
+    public ResponseEntity<Comarca> createComarca(@RequestBody Comarca comarca) throws URISyntaxException {
+        log.debug("REST request to save Comarca : {}", comarca);
+        if (comarca.getId() != null) {
             throw new BadRequestAlertException("A new comarca cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ComarcaDTO result = comarcaService.save(comarcaDTO);
+        Comarca result = comarcaService.save(comarca);
         return ResponseEntity
             .created(new URI("/api/comarcas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -63,22 +68,22 @@ public class ComarcaResource {
     /**
      * {@code PUT  /comarcas} : Updates an existing comarca.
      *
-     * @param comarcaDTO the comarcaDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated comarcaDTO,
-     * or with status {@code 400 (Bad Request)} if the comarcaDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the comarcaDTO couldn't be updated.
+     * @param comarca the comarca to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated comarca,
+     * or with status {@code 400 (Bad Request)} if the comarca is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the comarca couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/comarcas")
-    public ResponseEntity<ComarcaDTO> updateComarca(@RequestBody ComarcaDTO comarcaDTO) throws URISyntaxException {
-        log.debug("REST request to update Comarca : {}", comarcaDTO);
-        if (comarcaDTO.getId() == null) {
+    public ResponseEntity<Comarca> updateComarca(@RequestBody Comarca comarca) throws URISyntaxException {
+        log.debug("REST request to update Comarca : {}", comarca);
+        if (comarca.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ComarcaDTO result = comarcaService.save(comarcaDTO);
+        Comarca result = comarcaService.save(comarca);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, comarcaDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, comarca.getId().toString()))
             .body(result);
     }
 
@@ -86,33 +91,46 @@ public class ComarcaResource {
      * {@code GET  /comarcas} : get all the comarcas.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of comarcas in body.
      */
     @GetMapping("/comarcas")
-    public ResponseEntity<List<ComarcaDTO>> getAllComarcas(Pageable pageable) {
-        log.debug("REST request to get a page of Comarcas");
-        Page<ComarcaDTO> page = comarcaService.findAll(pageable);
+    public ResponseEntity<List<Comarca>> getAllComarcas(ComarcaCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get Comarcas by criteria: {}", criteria);
+        Page<Comarca> page = comarcaQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
+     * {@code GET  /comarcas/count} : count all the comarcas.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/comarcas/count")
+    public ResponseEntity<Long> countComarcas(ComarcaCriteria criteria) {
+        log.debug("REST request to count Comarcas by criteria: {}", criteria);
+        return ResponseEntity.ok().body(comarcaQueryService.countByCriteria(criteria));
+    }
+
+    /**
      * {@code GET  /comarcas/:id} : get the "id" comarca.
      *
-     * @param id the id of the comarcaDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the comarcaDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the comarca to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the comarca, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/comarcas/{id}")
-    public ResponseEntity<ComarcaDTO> getComarca(@PathVariable Long id) {
+    public ResponseEntity<Comarca> getComarca(@PathVariable Long id) {
         log.debug("REST request to get Comarca : {}", id);
-        Optional<ComarcaDTO> comarcaDTO = comarcaService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(comarcaDTO);
+        Optional<Comarca> comarca = comarcaService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(comarca);
     }
 
     /**
      * {@code DELETE  /comarcas/:id} : delete the "id" comarca.
      *
-     * @param id the id of the comarcaDTO to delete.
+     * @param id the id of the comarca to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/comarcas/{id}")

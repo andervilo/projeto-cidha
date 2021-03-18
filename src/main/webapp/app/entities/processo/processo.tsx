@@ -92,8 +92,43 @@ export const Processo = (props: IProcessoProps) => {
                 <th className="hand" onClick={sort('linkUnico')}>
                   <Translate contentKey="cidhaApp.processo.linkUnico">Link Unico</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
-                <th className="hand" onClick={sort('secaoJudiciaria')}>
-                  <Translate contentKey="cidhaApp.processo.secaoJudiciaria">Secao Judiciaria</Translate> <FontAwesomeIcon icon="sort" />
+                <th className="hand" onClick={sort('linkTrf')}>
+                  <Translate contentKey="cidhaApp.processo.linkTrf">Link Trf</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={sort('subsecaoJudiciaria')}>
+                  <Translate contentKey="cidhaApp.processo.subsecaoJudiciaria">Subsecao Judiciaria</Translate>{' '}
+                  <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={sort('turmaTrf1')}>
+                  <Translate contentKey="cidhaApp.processo.turmaTrf1">Turma Trf 1</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={sort('numeroProcessoAdministrativo')}>
+                  <Translate contentKey="cidhaApp.processo.numeroProcessoAdministrativo">Numero Processo Administrativo</Translate>{' '}
+                  <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={sort('numeroProcessoJudicialPrimeiraInstancia')}>
+                  <Translate contentKey="cidhaApp.processo.numeroProcessoJudicialPrimeiraInstancia">
+                    Numero Processo Judicial Primeira Instancia
+                  </Translate>{' '}
+                  <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={sort('numeroProcessoJudicialPrimeiraInstanciaLink')}>
+                  <Translate contentKey="cidhaApp.processo.numeroProcessoJudicialPrimeiraInstanciaLink">
+                    Numero Processo Judicial Primeira Instancia Link
+                  </Translate>{' '}
+                  <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={sort('numeroProcessoJudicialPrimeiraInstanciaObservacoes')}>
+                  <Translate contentKey="cidhaApp.processo.numeroProcessoJudicialPrimeiraInstanciaObservacoes">
+                    Numero Processo Judicial Primeira Instancia Observacoes
+                  </Translate>{' '}
+                  <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={sort('parecer')}>
+                  <Translate contentKey="cidhaApp.processo.parecer">Parecer</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th>
+                  <Translate contentKey="cidhaApp.processo.concessaoLiminar">Concessao Liminar</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
@@ -109,7 +144,21 @@ export const Processo = (props: IProcessoProps) => {
                   <td>{processo.oficio}</td>
                   <td>{processo.assunto}</td>
                   <td>{processo.linkUnico}</td>
-                  <td>{processo.secaoJudiciaria}</td>
+                  <td>{processo.linkTrf}</td>
+                  <td>{processo.subsecaoJudiciaria}</td>
+                  <td>{processo.turmaTrf1}</td>
+                  <td>{processo.numeroProcessoAdministrativo}</td>
+                  <td>{processo.numeroProcessoJudicialPrimeiraInstancia}</td>
+                  <td>{processo.numeroProcessoJudicialPrimeiraInstanciaLink}</td>
+                  <td>{processo.numeroProcessoJudicialPrimeiraInstanciaObservacoes}</td>
+                  <td>{processo.parecer ? 'true' : 'false'}</td>
+                  <td>
+                    {processo.concessaoLiminar ? (
+                      <Link to={`concessao-liminar/${processo.concessaoLiminar.id}`}>{processo.concessaoLiminar.id}</Link>
+                    ) : (
+                      ''
+                    )}
+                  </td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${processo.id}`} color="info" size="sm">

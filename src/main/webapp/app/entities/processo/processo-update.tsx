@@ -7,6 +7,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, b
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IConcessaoLiminar } from 'app/shared/model/concessao-liminar.model';
+import { getEntities as getConcessaoLiminars } from 'app/entities/concessao-liminar/concessao-liminar.reducer';
 import { IComarca } from 'app/shared/model/comarca.model';
 import { getEntities as getComarcas } from 'app/entities/comarca/comarca.reducer';
 import { IQuilombo } from 'app/shared/model/quilombo.model';
@@ -21,11 +23,12 @@ export interface IProcessoUpdateProps extends StateProps, DispatchProps, RouteCo
 export const ProcessoUpdate = (props: IProcessoUpdateProps) => {
   const [idscomarca, setIdscomarca] = useState([]);
   const [idsquilombo, setIdsquilombo] = useState([]);
+  const [concessaoLiminarId, setConcessaoLiminarId] = useState('0');
   const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { processoEntity, comarcas, quilombos, loading, updating } = props;
+  const { processoEntity, concessaoLiminars, comarcas, quilombos, loading, updating } = props;
 
-  const { assunto } = processoEntity;
+  const { assunto, numeroProcessoJudicialPrimeiraInstanciaObservacoes } = processoEntity;
 
   const handleClose = () => {
     props.history.push('/processo' + props.location.search);
@@ -38,6 +41,7 @@ export const ProcessoUpdate = (props: IProcessoUpdateProps) => {
       props.getEntity(props.match.params.id);
     }
 
+    props.getConcessaoLiminars();
     props.getComarcas();
     props.getQuilombos();
   }, []);
@@ -76,14 +80,14 @@ export const ProcessoUpdate = (props: IProcessoUpdateProps) => {
   return (
     <div>
       <Row className="justify-content-center">
-        <Col md="8">
+        <Col md="12">
           <h2 id="cidhaApp.processo.home.createOrEditLabel">
             <Translate contentKey="cidhaApp.processo.home.createOrEditLabel">Create or edit a Processo</Translate>
           </h2>
         </Col>
       </Row>
       <Row className="justify-content-center">
-        <Col md="8">
+        <Col  md="12">
           {loading ? (
             <p>Loading...</p>
           ) : (
@@ -96,6 +100,7 @@ export const ProcessoUpdate = (props: IProcessoUpdateProps) => {
                   <AvInput id="processo-id" type="text" className="form-control" name="id" required readOnly />
                 </AvGroup>
               ) : null}
+            
               <AvGroup>
                 <Label id="oficioLabel" for="processo-oficio">
                   <Translate contentKey="cidhaApp.processo.oficio">Oficio</Translate>
@@ -115,10 +120,84 @@ export const ProcessoUpdate = (props: IProcessoUpdateProps) => {
                 <AvField id="processo-linkUnico" type="text" name="linkUnico" />
               </AvGroup>
               <AvGroup>
-                <Label id="secaoJudiciariaLabel" for="processo-secaoJudiciaria">
-                  <Translate contentKey="cidhaApp.processo.secaoJudiciaria">Secao Judiciaria</Translate>
+                <Label id="linkTrfLabel" for="processo-linkTrf">
+                  <Translate contentKey="cidhaApp.processo.linkTrf">Link Trf</Translate>
                 </Label>
-                <AvField id="processo-secaoJudiciaria" type="text" name="secaoJudiciaria" />
+                <AvField id="processo-linkTrf" type="text" name="linkTrf" />
+              </AvGroup>
+              <AvGroup>
+                <Label id="subsecaoJudiciariaLabel" for="processo-subsecaoJudiciaria">
+                  <Translate contentKey="cidhaApp.processo.subsecaoJudiciaria">Subsecao Judiciaria</Translate>
+                </Label>
+                <AvField id="processo-subsecaoJudiciaria" type="text" name="subsecaoJudiciaria" />
+              </AvGroup>
+              <AvGroup>
+                <Label id="turmaTrf1Label" for="processo-turmaTrf1">
+                  <Translate contentKey="cidhaApp.processo.turmaTrf1">Turma Trf 1</Translate>
+                </Label>
+                <AvField id="processo-turmaTrf1" type="text" name="turmaTrf1" />
+              </AvGroup>
+              <AvGroup>
+                <Label id="numeroProcessoAdministrativoLabel" for="processo-numeroProcessoAdministrativo">
+                  <Translate contentKey="cidhaApp.processo.numeroProcessoAdministrativo">Numero Processo Administrativo</Translate>
+                </Label>
+                <AvField id="processo-numeroProcessoAdministrativo" type="text" name="numeroProcessoAdministrativo" />
+              </AvGroup>
+              <AvGroup>
+                <Label id="numeroProcessoJudicialPrimeiraInstanciaLabel" for="processo-numeroProcessoJudicialPrimeiraInstancia">
+                  <Translate contentKey="cidhaApp.processo.numeroProcessoJudicialPrimeiraInstancia">
+                    Numero Processo Judicial Primeira Instancia
+                  </Translate>
+                </Label>
+                <AvField id="processo-numeroProcessoJudicialPrimeiraInstancia" type="text" name="numeroProcessoJudicialPrimeiraInstancia" />
+              </AvGroup>
+              <AvGroup>
+                <Label id="numeroProcessoJudicialPrimeiraInstanciaLinkLabel" for="processo-numeroProcessoJudicialPrimeiraInstanciaLink">
+                  <Translate contentKey="cidhaApp.processo.numeroProcessoJudicialPrimeiraInstanciaLink">
+                    Numero Processo Judicial Primeira Instancia Link
+                  </Translate>
+                </Label>
+                <AvField
+                  id="processo-numeroProcessoJudicialPrimeiraInstanciaLink"
+                  type="text"
+                  name="numeroProcessoJudicialPrimeiraInstanciaLink"
+                />
+              </AvGroup>
+              <AvGroup>
+                <Label
+                  id="numeroProcessoJudicialPrimeiraInstanciaObservacoesLabel"
+                  for="processo-numeroProcessoJudicialPrimeiraInstanciaObservacoes"
+                >
+                  <Translate contentKey="cidhaApp.processo.numeroProcessoJudicialPrimeiraInstanciaObservacoes">
+                    Numero Processo Judicial Primeira Instancia Observacoes
+                  </Translate>
+                </Label>
+                <AvInput
+                  id="processo-numeroProcessoJudicialPrimeiraInstanciaObservacoes"
+                  type="textarea"
+                  name="numeroProcessoJudicialPrimeiraInstanciaObservacoes"
+                />
+              </AvGroup>
+              <AvGroup check>
+                <Label id="parecerLabel">
+                  <AvInput id="processo-parecer" type="checkbox" className="form-check-input" name="parecer" />
+                  <Translate contentKey="cidhaApp.processo.parecer">Parecer</Translate>
+                </Label>
+              </AvGroup>
+              <AvGroup>
+                <Label for="processo-concessaoLiminar">
+                  <Translate contentKey="cidhaApp.processo.concessaoLiminar">Concessao Liminar</Translate>
+                </Label>
+                <AvInput id="processo-concessaoLiminar" type="select" className="form-control" name="concessaoLiminar.id">
+                  <option value="" key="0" />
+                  {concessaoLiminars
+                    ? concessaoLiminars.map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.id}
+                        </option>
+                      ))
+                    : null}
+                </AvInput>
               </AvGroup>
               <AvGroup>
                 <Label for="processo-comarca">
@@ -186,6 +265,7 @@ export const ProcessoUpdate = (props: IProcessoUpdateProps) => {
 };
 
 const mapStateToProps = (storeState: IRootState) => ({
+  concessaoLiminars: storeState.concessaoLiminar.entities,
   comarcas: storeState.comarca.entities,
   quilombos: storeState.quilombo.entities,
   processoEntity: storeState.processo.entity,
@@ -195,6 +275,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getConcessaoLiminars,
   getComarcas,
   getQuilombos,
   getEntity,

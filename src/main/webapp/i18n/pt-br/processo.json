@@ -19,7 +19,15 @@
       "oficio": "Oficio",
       "assunto": "Assunto",
       "linkUnico": "Link Unico",
-      "secaoJudiciaria": "Secao Judiciaria",
+      "linkTrf": "Link Trf",
+      "subsecaoJudiciaria": "Subsecao Judiciaria",
+      "turmaTrf1": "Turma Trf 1",
+      "numeroProcessoAdministrativo": "Numero Processo Administrativo",
+      "numeroProcessoJudicialPrimeiraInstancia": "Numero Processo Judicial Primeira Instancia",
+      "numeroProcessoJudicialPrimeiraInstanciaLink": "Numero Processo Judicial Primeira Instancia Link",
+      "numeroProcessoJudicialPrimeiraInstanciaObservacoes": "Numero Processo Judicial Primeira Instancia Observacoes",
+      "parecer": "Parecer",
+      "concessaoLiminar": "Concessao Liminar",
       "comarca": "Comarca",
       "quilombo": "Quilombo"
     }

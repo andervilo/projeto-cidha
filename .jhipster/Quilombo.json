@@ -18,7 +18,7 @@
   ],
   "changelogDate": "20210318131207",
   "entityTableName": "quilombo",
-  "dto": "mapstruct",
+  "dto": "no",
   "pagination": "pagination",
   "service": "serviceClass",
   "jpaMetamodelFiltering": false,

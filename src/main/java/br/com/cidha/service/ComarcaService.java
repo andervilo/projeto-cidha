@@ -2,8 +2,6 @@ package br.com.cidha.service;
 
 import br.com.cidha.domain.Comarca;
 import br.com.cidha.repository.ComarcaRepository;
-import br.com.cidha.service.dto.ComarcaDTO;
-import br.com.cidha.service.mapper.ComarcaMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,24 +20,19 @@ public class ComarcaService {
 
     private final ComarcaRepository comarcaRepository;
 
-    private final ComarcaMapper comarcaMapper;
-
-    public ComarcaService(ComarcaRepository comarcaRepository, ComarcaMapper comarcaMapper) {
+    public ComarcaService(ComarcaRepository comarcaRepository) {
         this.comarcaRepository = comarcaRepository;
-        this.comarcaMapper = comarcaMapper;
     }
 
     /**
      * Save a comarca.
      *
-     * @param comarcaDTO the entity to save.
+     * @param comarca the entity to save.
      * @return the persisted entity.
      */
-    public ComarcaDTO save(ComarcaDTO comarcaDTO) {
-        log.debug("Request to save Comarca : {}", comarcaDTO);
-        Comarca comarca = comarcaMapper.toEntity(comarcaDTO);
-        comarca = comarcaRepository.save(comarca);
-        return comarcaMapper.toDto(comarca);
+    public Comarca save(Comarca comarca) {
+        log.debug("Request to save Comarca : {}", comarca);
+        return comarcaRepository.save(comarca);
     }
 
     /**
@@ -49,9 +42,9 @@ public class ComarcaService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<ComarcaDTO> findAll(Pageable pageable) {
+    public Page<Comarca> findAll(Pageable pageable) {
         log.debug("Request to get all Comarcas");
-        return comarcaRepository.findAll(pageable).map(comarcaMapper::toDto);
+        return comarcaRepository.findAll(pageable);
     }
 
     /**
@@ -61,9 +54,9 @@ public class ComarcaService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<ComarcaDTO> findOne(Long id) {
+    public Optional<Comarca> findOne(Long id) {
         log.debug("Request to get Comarca : {}", id);
-        return comarcaRepository.findById(id).map(comarcaMapper::toDto);
+        return comarcaRepository.findById(id);
     }
 
     /**

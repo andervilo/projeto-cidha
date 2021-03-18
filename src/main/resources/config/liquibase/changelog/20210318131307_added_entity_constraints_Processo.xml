@@ -8,6 +8,12 @@
     -->
     <changeSet id="20210318131307-2" author="jhipster">
         
+        <addForeignKeyConstraint baseColumnNames="concessao_liminar_id"
+                                 baseTableName="processo"
+                                 constraintName="fk_processo_concessao_liminar_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="concessao_liminar"/>
+
         <addForeignKeyConstraint baseColumnNames="processo_id"
                                  baseTableName="processo_comarca"
                                  constraintName="fk_processo_comarca_processo_id"

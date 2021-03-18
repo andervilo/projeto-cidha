@@ -9,4 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ComarcaRepository extends JpaRepository<Comarca, Long> {}
+public interface ComarcaRepository extends JpaRepository<Comarca, Long>, JpaSpecificationExecutor<Comarca> {}

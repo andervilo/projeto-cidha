@@ -2,8 +2,6 @@ package br.com.cidha.service;
 
 import br.com.cidha.domain.Quilombo;
 import br.com.cidha.repository.QuilomboRepository;
-import br.com.cidha.service.dto.QuilomboDTO;
-import br.com.cidha.service.mapper.QuilomboMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,24 +20,19 @@ public class QuilomboService {
 
     private final QuilomboRepository quilomboRepository;
 
-    private final QuilomboMapper quilomboMapper;
-
-    public QuilomboService(QuilomboRepository quilomboRepository, QuilomboMapper quilomboMapper) {
+    public QuilomboService(QuilomboRepository quilomboRepository) {
         this.quilomboRepository = quilomboRepository;
-        this.quilomboMapper = quilomboMapper;
     }
 
     /**
      * Save a quilombo.
      *
-     * @param quilomboDTO the entity to save.
+     * @param quilombo the entity to save.
      * @return the persisted entity.
      */
-    public QuilomboDTO save(QuilomboDTO quilomboDTO) {
-        log.debug("Request to save Quilombo : {}", quilomboDTO);
-        Quilombo quilombo = quilomboMapper.toEntity(quilomboDTO);
-        quilombo = quilomboRepository.save(quilombo);
-        return quilomboMapper.toDto(quilombo);
+    public Quilombo save(Quilombo quilombo) {
+        log.debug("Request to save Quilombo : {}", quilombo);
+        return quilomboRepository.save(quilombo);
     }
 
     /**
@@ -49,9 +42,9 @@ public class QuilomboService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<QuilomboDTO> findAll(Pageable pageable) {
+    public Page<Quilombo> findAll(Pageable pageable) {
         log.debug("Request to get all Quilombos");
-        return quilomboRepository.findAll(pageable).map(quilomboMapper::toDto);
+        return quilomboRepository.findAll(pageable);
     }
 
     /**
@@ -61,9 +54,9 @@ public class QuilomboService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<QuilomboDTO> findOne(Long id) {
+    public Optional<Quilombo> findOne(Long id) {
         log.debug("Request to get Quilombo : {}", id);
-        return quilomboRepository.findById(id).map(quilomboMapper::toDto);
+        return quilomboRepository.findById(id);
     }
 
     /**

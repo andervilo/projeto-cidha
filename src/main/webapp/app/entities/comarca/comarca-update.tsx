@@ -7,8 +7,6 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IProcesso } from 'app/shared/model/processo.model';
-import { getEntities as getProcessos } from 'app/entities/processo/processo.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './comarca.reducer';
 import { IComarca } from 'app/shared/model/comarca.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
@@ -17,10 +15,9 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IComarcaUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const ComarcaUpdate = (props: IComarcaUpdateProps) => {
-  const [processoId, setProcessoId] = useState('0');
   const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { comarcaEntity, processos, loading, updating } = props;
+  const { comarcaEntity, loading, updating } = props;
 
   const handleClose = () => {
     props.history.push('/comarca' + props.location.search);
@@ -32,8 +29,6 @@ export const ComarcaUpdate = (props: IComarcaUpdateProps) => {
     } else {
       props.getEntity(props.match.params.id);
     }
-
-    props.getProcessos();
   }, []);
 
   useEffect(() => {
@@ -114,7 +109,6 @@ export const ComarcaUpdate = (props: IComarcaUpdateProps) => {
 };
 
 const mapStateToProps = (storeState: IRootState) => ({
-  processos: storeState.processo.entities,
   comarcaEntity: storeState.comarca.entity,
   loading: storeState.comarca.loading,
   updating: storeState.comarca.updating,
@@ -122,7 +116,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getProcessos,
   getEntity,
   updateEntity,
   createEntity,

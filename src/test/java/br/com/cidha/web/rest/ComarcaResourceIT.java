@@ -8,9 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import br.com.cidha.CidhaApp;
 import br.com.cidha.domain.Comarca;
 import br.com.cidha.repository.ComarcaRepository;
+import br.com.cidha.service.ComarcaQueryService;
 import br.com.cidha.service.ComarcaService;
-import br.com.cidha.service.dto.ComarcaDTO;
-import br.com.cidha.service.mapper.ComarcaMapper;
+import br.com.cidha.service.dto.ComarcaCriteria;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -36,15 +36,16 @@ public class ComarcaResourceIT {
 
     private static final BigDecimal DEFAULT_CODIGO_CNJ = new BigDecimal(1);
     private static final BigDecimal UPDATED_CODIGO_CNJ = new BigDecimal(2);
+    private static final BigDecimal SMALLER_CODIGO_CNJ = new BigDecimal(1 - 1);
 
     @Autowired
     private ComarcaRepository comarcaRepository;
 
     @Autowired
-    private ComarcaMapper comarcaMapper;
+    private ComarcaService comarcaService;
 
     @Autowired
-    private ComarcaService comarcaService;
+    private ComarcaQueryService comarcaQueryService;
 
     @Autowired
     private EntityManager em;
@@ -86,9 +87,8 @@ public class ComarcaResourceIT {
     public void createComarca() throws Exception {
         int databaseSizeBeforeCreate = comarcaRepository.findAll().size();
         // Create the Comarca
-        ComarcaDTO comarcaDTO = comarcaMapper.toDto(comarca);
         restComarcaMockMvc
-            .perform(post("/api/comarcas").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(comarcaDTO)))
+            .perform(post("/api/comarcas").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(comarca)))
             .andExpect(status().isCreated());
 
         // Validate the Comarca in the database
@@ -106,11 +106,10 @@ public class ComarcaResourceIT {
 
         // Create the Comarca with an existing ID
         comarca.setId(1L);
-        ComarcaDTO comarcaDTO = comarcaMapper.toDto(comarca);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restComarcaMockMvc
-            .perform(post("/api/comarcas").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(comarcaDTO)))
+            .perform(post("/api/comarcas").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(comarca)))
             .andExpect(status().isBadRequest());
 
         // Validate the Comarca in the database
@@ -152,6 +151,245 @@ public class ComarcaResourceIT {
 
     @Test
     @Transactional
+    public void getComarcasByIdFiltering() throws Exception {
+        // Initialize the database
+        comarcaRepository.saveAndFlush(comarca);
+
+        Long id = comarca.getId();
+
+        defaultComarcaShouldBeFound("id.equals=" + id);
+        defaultComarcaShouldNotBeFound("id.notEquals=" + id);
+
+        defaultComarcaShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultComarcaShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultComarcaShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultComarcaShouldNotBeFound("id.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    public void getAllComarcasByNomeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        comarcaRepository.saveAndFlush(comarca);
+
+        // Get all the comarcaList where nome equals to DEFAULT_NOME
+        defaultComarcaShouldBeFound("nome.equals=" + DEFAULT_NOME);
+
+        // Get all the comarcaList where nome equals to UPDATED_NOME
+        defaultComarcaShouldNotBeFound("nome.equals=" + UPDATED_NOME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllComarcasByNomeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        comarcaRepository.saveAndFlush(comarca);
+
+        // Get all the comarcaList where nome not equals to DEFAULT_NOME
+        defaultComarcaShouldNotBeFound("nome.notEquals=" + DEFAULT_NOME);
+
+        // Get all the comarcaList where nome not equals to UPDATED_NOME
+        defaultComarcaShouldBeFound("nome.notEquals=" + UPDATED_NOME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllComarcasByNomeIsInShouldWork() throws Exception {
+        // Initialize the database
+        comarcaRepository.saveAndFlush(comarca);
+
+        // Get all the comarcaList where nome in DEFAULT_NOME or UPDATED_NOME
+        defaultComarcaShouldBeFound("nome.in=" + DEFAULT_NOME + "," + UPDATED_NOME);
+
+        // Get all the comarcaList where nome equals to UPDATED_NOME
+        defaultComarcaShouldNotBeFound("nome.in=" + UPDATED_NOME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllComarcasByNomeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        comarcaRepository.saveAndFlush(comarca);
+
+        // Get all the comarcaList where nome is not null
+        defaultComarcaShouldBeFound("nome.specified=true");
+
+        // Get all the comarcaList where nome is null
+        defaultComarcaShouldNotBeFound("nome.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllComarcasByNomeContainsSomething() throws Exception {
+        // Initialize the database
+        comarcaRepository.saveAndFlush(comarca);
+
+        // Get all the comarcaList where nome contains DEFAULT_NOME
+        defaultComarcaShouldBeFound("nome.contains=" + DEFAULT_NOME);
+
+        // Get all the comarcaList where nome contains UPDATED_NOME
+        defaultComarcaShouldNotBeFound("nome.contains=" + UPDATED_NOME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllComarcasByNomeNotContainsSomething() throws Exception {
+        // Initialize the database
+        comarcaRepository.saveAndFlush(comarca);
+
+        // Get all the comarcaList where nome does not contain DEFAULT_NOME
+        defaultComarcaShouldNotBeFound("nome.doesNotContain=" + DEFAULT_NOME);
+
+        // Get all the comarcaList where nome does not contain UPDATED_NOME
+        defaultComarcaShouldBeFound("nome.doesNotContain=" + UPDATED_NOME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllComarcasByCodigoCnjIsEqualToSomething() throws Exception {
+        // Initialize the database
+        comarcaRepository.saveAndFlush(comarca);
+
+        // Get all the comarcaList where codigoCnj equals to DEFAULT_CODIGO_CNJ
+        defaultComarcaShouldBeFound("codigoCnj.equals=" + DEFAULT_CODIGO_CNJ);
+
+        // Get all the comarcaList where codigoCnj equals to UPDATED_CODIGO_CNJ
+        defaultComarcaShouldNotBeFound("codigoCnj.equals=" + UPDATED_CODIGO_CNJ);
+    }
+
+    @Test
+    @Transactional
+    public void getAllComarcasByCodigoCnjIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        comarcaRepository.saveAndFlush(comarca);
+
+        // Get all the comarcaList where codigoCnj not equals to DEFAULT_CODIGO_CNJ
+        defaultComarcaShouldNotBeFound("codigoCnj.notEquals=" + DEFAULT_CODIGO_CNJ);
+
+        // Get all the comarcaList where codigoCnj not equals to UPDATED_CODIGO_CNJ
+        defaultComarcaShouldBeFound("codigoCnj.notEquals=" + UPDATED_CODIGO_CNJ);
+    }
+
+    @Test
+    @Transactional
+    public void getAllComarcasByCodigoCnjIsInShouldWork() throws Exception {
+        // Initialize the database
+        comarcaRepository.saveAndFlush(comarca);
+
+        // Get all the comarcaList where codigoCnj in DEFAULT_CODIGO_CNJ or UPDATED_CODIGO_CNJ
+        defaultComarcaShouldBeFound("codigoCnj.in=" + DEFAULT_CODIGO_CNJ + "," + UPDATED_CODIGO_CNJ);
+
+        // Get all the comarcaList where codigoCnj equals to UPDATED_CODIGO_CNJ
+        defaultComarcaShouldNotBeFound("codigoCnj.in=" + UPDATED_CODIGO_CNJ);
+    }
+
+    @Test
+    @Transactional
+    public void getAllComarcasByCodigoCnjIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        comarcaRepository.saveAndFlush(comarca);
+
+        // Get all the comarcaList where codigoCnj is not null
+        defaultComarcaShouldBeFound("codigoCnj.specified=true");
+
+        // Get all the comarcaList where codigoCnj is null
+        defaultComarcaShouldNotBeFound("codigoCnj.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllComarcasByCodigoCnjIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        comarcaRepository.saveAndFlush(comarca);
+
+        // Get all the comarcaList where codigoCnj is greater than or equal to DEFAULT_CODIGO_CNJ
+        defaultComarcaShouldBeFound("codigoCnj.greaterThanOrEqual=" + DEFAULT_CODIGO_CNJ);
+
+        // Get all the comarcaList where codigoCnj is greater than or equal to UPDATED_CODIGO_CNJ
+        defaultComarcaShouldNotBeFound("codigoCnj.greaterThanOrEqual=" + UPDATED_CODIGO_CNJ);
+    }
+
+    @Test
+    @Transactional
+    public void getAllComarcasByCodigoCnjIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        comarcaRepository.saveAndFlush(comarca);
+
+        // Get all the comarcaList where codigoCnj is less than or equal to DEFAULT_CODIGO_CNJ
+        defaultComarcaShouldBeFound("codigoCnj.lessThanOrEqual=" + DEFAULT_CODIGO_CNJ);
+
+        // Get all the comarcaList where codigoCnj is less than or equal to SMALLER_CODIGO_CNJ
+        defaultComarcaShouldNotBeFound("codigoCnj.lessThanOrEqual=" + SMALLER_CODIGO_CNJ);
+    }
+
+    @Test
+    @Transactional
+    public void getAllComarcasByCodigoCnjIsLessThanSomething() throws Exception {
+        // Initialize the database
+        comarcaRepository.saveAndFlush(comarca);
+
+        // Get all the comarcaList where codigoCnj is less than DEFAULT_CODIGO_CNJ
+        defaultComarcaShouldNotBeFound("codigoCnj.lessThan=" + DEFAULT_CODIGO_CNJ);
+
+        // Get all the comarcaList where codigoCnj is less than UPDATED_CODIGO_CNJ
+        defaultComarcaShouldBeFound("codigoCnj.lessThan=" + UPDATED_CODIGO_CNJ);
+    }
+
+    @Test
+    @Transactional
+    public void getAllComarcasByCodigoCnjIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        comarcaRepository.saveAndFlush(comarca);
+
+        // Get all the comarcaList where codigoCnj is greater than DEFAULT_CODIGO_CNJ
+        defaultComarcaShouldNotBeFound("codigoCnj.greaterThan=" + DEFAULT_CODIGO_CNJ);
+
+        // Get all the comarcaList where codigoCnj is greater than SMALLER_CODIGO_CNJ
+        defaultComarcaShouldBeFound("codigoCnj.greaterThan=" + SMALLER_CODIGO_CNJ);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultComarcaShouldBeFound(String filter) throws Exception {
+        restComarcaMockMvc
+            .perform(get("/api/comarcas?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(comarca.getId().intValue())))
+            .andExpect(jsonPath("$.[*].nome").value(hasItem(DEFAULT_NOME)))
+            .andExpect(jsonPath("$.[*].codigoCnj").value(hasItem(DEFAULT_CODIGO_CNJ.intValue())));
+
+        // Check, that the count call also returns 1
+        restComarcaMockMvc
+            .perform(get("/api/comarcas/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultComarcaShouldNotBeFound(String filter) throws Exception {
+        restComarcaMockMvc
+            .perform(get("/api/comarcas?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restComarcaMockMvc
+            .perform(get("/api/comarcas/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+    @Test
+    @Transactional
     public void getNonExistingComarca() throws Exception {
         // Get the comarca
         restComarcaMockMvc.perform(get("/api/comarcas/{id}", Long.MAX_VALUE)).andExpect(status().isNotFound());
@@ -161,7 +399,7 @@ public class ComarcaResourceIT {
     @Transactional
     public void updateComarca() throws Exception {
         // Initialize the database
-        comarcaRepository.saveAndFlush(comarca);
+        comarcaService.save(comarca);
 
         int databaseSizeBeforeUpdate = comarcaRepository.findAll().size();
 
@@ -170,10 +408,11 @@ public class ComarcaResourceIT {
         // Disconnect from session so that the updates on updatedComarca are not directly saved in db
         em.detach(updatedComarca);
         updatedComarca.nome(UPDATED_NOME).codigoCnj(UPDATED_CODIGO_CNJ);
-        ComarcaDTO comarcaDTO = comarcaMapper.toDto(updatedComarca);
 
         restComarcaMockMvc
-            .perform(put("/api/comarcas").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(comarcaDTO)))
+            .perform(
+                put("/api/comarcas").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(updatedComarca))
+            )
             .andExpect(status().isOk());
 
         // Validate the Comarca in the database
@@ -189,12 +428,9 @@ public class ComarcaResourceIT {
     public void updateNonExistingComarca() throws Exception {
         int databaseSizeBeforeUpdate = comarcaRepository.findAll().size();
 
-        // Create the Comarca
-        ComarcaDTO comarcaDTO = comarcaMapper.toDto(comarca);
-
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restComarcaMockMvc
-            .perform(put("/api/comarcas").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(comarcaDTO)))
+            .perform(put("/api/comarcas").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(comarca)))
             .andExpect(status().isBadRequest());
 
         // Validate the Comarca in the database
@@ -206,7 +442,7 @@ public class ComarcaResourceIT {
     @Transactional
     public void deleteComarca() throws Exception {
         // Initialize the database
-        comarcaRepository.saveAndFlush(comarca);
+        comarcaService.save(comarca);
 
         int databaseSizeBeforeDelete = comarcaRepository.findAll().size();
 

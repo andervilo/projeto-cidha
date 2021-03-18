@@ -1,0 +1,9 @@
+entity Quilombo
+ {
+    id Long required
+    nome String
+}
+
+paginate Quilombo with pagination
+//dto Quilombo with mapstruct
+service Quilombo with serviceClass

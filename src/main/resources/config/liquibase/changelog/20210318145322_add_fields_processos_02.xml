@@ -1,0 +1,23 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.9.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <changeSet author="ander (generated)" id="1616079222067-2">
+        <addColumn tableName="processo">
+            <column name="parecer" type="boolean"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="ander (generated)" id="1616079222067-3">
+        <addForeignKeyConstraint baseColumnNames="quilombo_id" baseTableName="processo_quilombo" constraintName="FK4b40boy3i5eha0ciqwdocgtfm" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="quilombo" validate="true"/>
+    </changeSet>
+    <changeSet author="ander (generated)" id="1616079222067-4">
+        <addForeignKeyConstraint baseColumnNames="processo_id" baseTableName="processo_comarca" constraintName="FK6sq2k8pby07ew94xuofrhf52l" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="processo" validate="true"/>
+    </changeSet>
+    <changeSet author="ander (generated)" id="1616079222067-5">
+        <addForeignKeyConstraint baseColumnNames="comarca_id" baseTableName="processo_comarca" constraintName="FKkg923sy470r0lsjrglnp4f16q" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="comarca" validate="true"/>
+    </changeSet>
+    <changeSet author="ander (generated)" id="1616079222067-6">
+        <addForeignKeyConstraint baseColumnNames="processo_id" baseTableName="processo_quilombo" constraintName="FKpbyk5fune56n9ucovuyq1ex7r" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="processo" validate="true"/>
+    </changeSet>
+    <changeSet author="ander (generated)" id="1616079222067-1">
+        <alterSequence sequenceName="sequence_generator"/>
+    </changeSet>
+</databaseChangeLog>

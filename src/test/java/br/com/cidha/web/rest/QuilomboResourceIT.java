@@ -9,8 +9,6 @@ import br.com.cidha.CidhaApp;
 import br.com.cidha.domain.Quilombo;
 import br.com.cidha.repository.QuilomboRepository;
 import br.com.cidha.service.QuilomboService;
-import br.com.cidha.service.dto.QuilomboDTO;
-import br.com.cidha.service.mapper.QuilomboMapper;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,9 +33,6 @@ public class QuilomboResourceIT {
 
     @Autowired
     private QuilomboRepository quilomboRepository;
-
-    @Autowired
-    private QuilomboMapper quilomboMapper;
 
     @Autowired
     private QuilomboService quilomboService;
@@ -82,9 +77,8 @@ public class QuilomboResourceIT {
     public void createQuilombo() throws Exception {
         int databaseSizeBeforeCreate = quilomboRepository.findAll().size();
         // Create the Quilombo
-        QuilomboDTO quilomboDTO = quilomboMapper.toDto(quilombo);
         restQuilomboMockMvc
-            .perform(post("/api/quilombos").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(quilomboDTO)))
+            .perform(post("/api/quilombos").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(quilombo)))
             .andExpect(status().isCreated());
 
         // Validate the Quilombo in the database
@@ -101,11 +95,10 @@ public class QuilomboResourceIT {
 
         // Create the Quilombo with an existing ID
         quilombo.setId(1L);
-        QuilomboDTO quilomboDTO = quilomboMapper.toDto(quilombo);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restQuilomboMockMvc
-            .perform(post("/api/quilombos").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(quilomboDTO)))
+            .perform(post("/api/quilombos").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(quilombo)))
             .andExpect(status().isBadRequest());
 
         // Validate the Quilombo in the database
@@ -154,7 +147,7 @@ public class QuilomboResourceIT {
     @Transactional
     public void updateQuilombo() throws Exception {
         // Initialize the database
-        quilomboRepository.saveAndFlush(quilombo);
+        quilomboService.save(quilombo);
 
         int databaseSizeBeforeUpdate = quilomboRepository.findAll().size();
 
@@ -163,10 +156,11 @@ public class QuilomboResourceIT {
         // Disconnect from session so that the updates on updatedQuilombo are not directly saved in db
         em.detach(updatedQuilombo);
         updatedQuilombo.nome(UPDATED_NOME);
-        QuilomboDTO quilomboDTO = quilomboMapper.toDto(updatedQuilombo);
 
         restQuilomboMockMvc
-            .perform(put("/api/quilombos").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(quilomboDTO)))
+            .perform(
+                put("/api/quilombos").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(updatedQuilombo))
+            )
             .andExpect(status().isOk());
 
         // Validate the Quilombo in the database
@@ -181,12 +175,9 @@ public class QuilomboResourceIT {
     public void updateNonExistingQuilombo() throws Exception {
         int databaseSizeBeforeUpdate = quilomboRepository.findAll().size();
 
-        // Create the Quilombo
-        QuilomboDTO quilomboDTO = quilomboMapper.toDto(quilombo);
-
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restQuilomboMockMvc
-            .perform(put("/api/quilombos").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(quilomboDTO)))
+            .perform(put("/api/quilombos").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(quilombo)))
             .andExpect(status().isBadRequest());
 
         // Validate the Quilombo in the database
@@ -198,7 +189,7 @@ public class QuilomboResourceIT {
     @Transactional
     public void deleteQuilombo() throws Exception {
         // Initialize the database
-        quilomboRepository.saveAndFlush(quilombo);
+        quilomboService.save(quilombo);
 
         int databaseSizeBeforeDelete = quilomboRepository.findAll().size();
 

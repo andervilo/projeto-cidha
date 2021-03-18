@@ -1,0 +1,9 @@
+entity ConcessaoLiminar
+ {
+    id Long required
+    descricao TextBlob
+}
+
+paginate ConcessaoLiminar with pagination
+//dto ConcessaoLiminar with mapstruct
+service ConcessaoLiminar with serviceClass

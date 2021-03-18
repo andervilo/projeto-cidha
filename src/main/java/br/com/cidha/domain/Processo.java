@@ -1,5 +1,6 @@
 package br.com.cidha.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,8 +34,35 @@ public class Processo implements Serializable {
     @Column(name = "link_unico")
     private String linkUnico;
 
-    @Column(name = "secao_judiciaria")
-    private String secaoJudiciaria;
+    @Column(name = "link_trf")
+    private String linkTrf;
+
+    @Column(name = "subsecao_judiciaria")
+    private String subsecaoJudiciaria;
+
+    @Column(name = "turma_trf_1")
+    private String turmaTrf1;
+
+    @Column(name = "numero_processo_administrativo")
+    private String numeroProcessoAdministrativo;
+
+    @Column(name = "numero_processo_judicial_primeira_instancia")
+    private String numeroProcessoJudicialPrimeiraInstancia;
+
+    @Column(name = "numero_processo_judicial_primeira_instancia_link")
+    private String numeroProcessoJudicialPrimeiraInstanciaLink;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(name = "numero_processo_judicial_primeira_instancia_observacoes")
+    private String numeroProcessoJudicialPrimeiraInstanciaObservacoes;
+
+    @Column(name = "parecer")
+    private Boolean parecer;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = "processos", allowSetters = true)
+    private ConcessaoLiminar concessaoLiminar;
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -102,17 +130,121 @@ public class Processo implements Serializable {
         this.linkUnico = linkUnico;
     }
 
-    public String getSecaoJudiciaria() {
-        return secaoJudiciaria;
+    public String getLinkTrf() {
+        return linkTrf;
     }
 
-    public Processo secaoJudiciaria(String secaoJudiciaria) {
-        this.secaoJudiciaria = secaoJudiciaria;
+    public Processo linkTrf(String linkTrf) {
+        this.linkTrf = linkTrf;
         return this;
     }
 
-    public void setSecaoJudiciaria(String secaoJudiciaria) {
-        this.secaoJudiciaria = secaoJudiciaria;
+    public void setLinkTrf(String linkTrf) {
+        this.linkTrf = linkTrf;
+    }
+
+    public String getSubsecaoJudiciaria() {
+        return subsecaoJudiciaria;
+    }
+
+    public Processo subsecaoJudiciaria(String subsecaoJudiciaria) {
+        this.subsecaoJudiciaria = subsecaoJudiciaria;
+        return this;
+    }
+
+    public void setSubsecaoJudiciaria(String subsecaoJudiciaria) {
+        this.subsecaoJudiciaria = subsecaoJudiciaria;
+    }
+
+    public String getTurmaTrf1() {
+        return turmaTrf1;
+    }
+
+    public Processo turmaTrf1(String turmaTrf1) {
+        this.turmaTrf1 = turmaTrf1;
+        return this;
+    }
+
+    public void setTurmaTrf1(String turmaTrf1) {
+        this.turmaTrf1 = turmaTrf1;
+    }
+
+    public String getNumeroProcessoAdministrativo() {
+        return numeroProcessoAdministrativo;
+    }
+
+    public Processo numeroProcessoAdministrativo(String numeroProcessoAdministrativo) {
+        this.numeroProcessoAdministrativo = numeroProcessoAdministrativo;
+        return this;
+    }
+
+    public void setNumeroProcessoAdministrativo(String numeroProcessoAdministrativo) {
+        this.numeroProcessoAdministrativo = numeroProcessoAdministrativo;
+    }
+
+    public String getNumeroProcessoJudicialPrimeiraInstancia() {
+        return numeroProcessoJudicialPrimeiraInstancia;
+    }
+
+    public Processo numeroProcessoJudicialPrimeiraInstancia(String numeroProcessoJudicialPrimeiraInstancia) {
+        this.numeroProcessoJudicialPrimeiraInstancia = numeroProcessoJudicialPrimeiraInstancia;
+        return this;
+    }
+
+    public void setNumeroProcessoJudicialPrimeiraInstancia(String numeroProcessoJudicialPrimeiraInstancia) {
+        this.numeroProcessoJudicialPrimeiraInstancia = numeroProcessoJudicialPrimeiraInstancia;
+    }
+
+    public String getNumeroProcessoJudicialPrimeiraInstanciaLink() {
+        return numeroProcessoJudicialPrimeiraInstanciaLink;
+    }
+
+    public Processo numeroProcessoJudicialPrimeiraInstanciaLink(String numeroProcessoJudicialPrimeiraInstanciaLink) {
+        this.numeroProcessoJudicialPrimeiraInstanciaLink = numeroProcessoJudicialPrimeiraInstanciaLink;
+        return this;
+    }
+
+    public void setNumeroProcessoJudicialPrimeiraInstanciaLink(String numeroProcessoJudicialPrimeiraInstanciaLink) {
+        this.numeroProcessoJudicialPrimeiraInstanciaLink = numeroProcessoJudicialPrimeiraInstanciaLink;
+    }
+
+    public String getNumeroProcessoJudicialPrimeiraInstanciaObservacoes() {
+        return numeroProcessoJudicialPrimeiraInstanciaObservacoes;
+    }
+
+    public Processo numeroProcessoJudicialPrimeiraInstanciaObservacoes(String numeroProcessoJudicialPrimeiraInstanciaObservacoes) {
+        this.numeroProcessoJudicialPrimeiraInstanciaObservacoes = numeroProcessoJudicialPrimeiraInstanciaObservacoes;
+        return this;
+    }
+
+    public void setNumeroProcessoJudicialPrimeiraInstanciaObservacoes(String numeroProcessoJudicialPrimeiraInstanciaObservacoes) {
+        this.numeroProcessoJudicialPrimeiraInstanciaObservacoes = numeroProcessoJudicialPrimeiraInstanciaObservacoes;
+    }
+
+    public Boolean isParecer() {
+        return parecer;
+    }
+
+    public Processo parecer(Boolean parecer) {
+        this.parecer = parecer;
+        return this;
+    }
+
+    public void setParecer(Boolean parecer) {
+        this.parecer = parecer;
+    }
+
+    public ConcessaoLiminar getConcessaoLiminar() {
+        return concessaoLiminar;
+    }
+
+    public Processo concessaoLiminar(ConcessaoLiminar concessaoLiminar) {
+        this.concessaoLiminar = concessaoLiminar;
+        return this;
+    }
+
+    public void setConcessaoLiminar(ConcessaoLiminar concessaoLiminar) {
+        this.concessaoLiminar = concessaoLiminar;
     }
 
     public Set<Comarca> getComarcas() {
@@ -191,7 +323,14 @@ public class Processo implements Serializable {
             ", oficio='" + getOficio() + "'" +
             ", assunto='" + getAssunto() + "'" +
             ", linkUnico='" + getLinkUnico() + "'" +
-            ", secaoJudiciaria='" + getSecaoJudiciaria() + "'" +
+            ", linkTrf='" + getLinkTrf() + "'" +
+            ", subsecaoJudiciaria='" + getSubsecaoJudiciaria() + "'" +
+            ", turmaTrf1='" + getTurmaTrf1() + "'" +
+            ", numeroProcessoAdministrativo='" + getNumeroProcessoAdministrativo() + "'" +
+            ", numeroProcessoJudicialPrimeiraInstancia='" + getNumeroProcessoJudicialPrimeiraInstancia() + "'" +
+            ", numeroProcessoJudicialPrimeiraInstanciaLink='" + getNumeroProcessoJudicialPrimeiraInstanciaLink() + "'" +
+            ", numeroProcessoJudicialPrimeiraInstanciaObservacoes='" + getNumeroProcessoJudicialPrimeiraInstanciaObservacoes() + "'" +
+            ", parecer='" + isParecer() + "'" +
             "}";
     }
 }

@@ -1,7 +1,7 @@
 package br.com.cidha.web.rest;
 
+import br.com.cidha.domain.Processo;
 import br.com.cidha.service.ProcessoService;
-import br.com.cidha.service.dto.ProcessoDTO;
 import br.com.cidha.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -43,17 +43,17 @@ public class ProcessoResource {
     /**
      * {@code POST  /processos} : Create a new processo.
      *
-     * @param processoDTO the processoDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new processoDTO, or with status {@code 400 (Bad Request)} if the processo has already an ID.
+     * @param processo the processo to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new processo, or with status {@code 400 (Bad Request)} if the processo has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/processos")
-    public ResponseEntity<ProcessoDTO> createProcesso(@RequestBody ProcessoDTO processoDTO) throws URISyntaxException {
-        log.debug("REST request to save Processo : {}", processoDTO);
-        if (processoDTO.getId() != null) {
+    public ResponseEntity<Processo> createProcesso(@RequestBody Processo processo) throws URISyntaxException {
+        log.debug("REST request to save Processo : {}", processo);
+        if (processo.getId() != null) {
             throw new BadRequestAlertException("A new processo cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ProcessoDTO result = processoService.save(processoDTO);
+        Processo result = processoService.save(processo);
         return ResponseEntity
             .created(new URI("/api/processos/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -63,22 +63,22 @@ public class ProcessoResource {
     /**
      * {@code PUT  /processos} : Updates an existing processo.
      *
-     * @param processoDTO the processoDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated processoDTO,
-     * or with status {@code 400 (Bad Request)} if the processoDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the processoDTO couldn't be updated.
+     * @param processo the processo to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated processo,
+     * or with status {@code 400 (Bad Request)} if the processo is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the processo couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/processos")
-    public ResponseEntity<ProcessoDTO> updateProcesso(@RequestBody ProcessoDTO processoDTO) throws URISyntaxException {
-        log.debug("REST request to update Processo : {}", processoDTO);
-        if (processoDTO.getId() == null) {
+    public ResponseEntity<Processo> updateProcesso(@RequestBody Processo processo) throws URISyntaxException {
+        log.debug("REST request to update Processo : {}", processo);
+        if (processo.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ProcessoDTO result = processoService.save(processoDTO);
+        Processo result = processoService.save(processo);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, processoDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, processo.getId().toString()))
             .body(result);
     }
 
@@ -90,12 +90,12 @@ public class ProcessoResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of processos in body.
      */
     @GetMapping("/processos")
-    public ResponseEntity<List<ProcessoDTO>> getAllProcessos(
+    public ResponseEntity<List<Processo>> getAllProcessos(
         Pageable pageable,
         @RequestParam(required = false, defaultValue = "false") boolean eagerload
     ) {
         log.debug("REST request to get a page of Processos");
-        Page<ProcessoDTO> page;
+        Page<Processo> page;
         if (eagerload) {
             page = processoService.findAllWithEagerRelationships(pageable);
         } else {
@@ -108,20 +108,20 @@ public class ProcessoResource {
     /**
      * {@code GET  /processos/:id} : get the "id" processo.
      *
-     * @param id the id of the processoDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the processoDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the processo to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the processo, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/processos/{id}")
-    public ResponseEntity<ProcessoDTO> getProcesso(@PathVariable Long id) {
+    public ResponseEntity<Processo> getProcesso(@PathVariable Long id) {
         log.debug("REST request to get Processo : {}", id);
-        Optional<ProcessoDTO> processoDTO = processoService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(processoDTO);
+        Optional<Processo> processo = processoService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(processo);
     }
 
     /**
      * {@code DELETE  /processos/:id} : delete the "id" processo.
      *
-     * @param id the id of the processoDTO to delete.
+     * @param id the id of the processo to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/processos/{id}")

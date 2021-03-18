@@ -1,0 +1,11 @@
+entity Comarca
+ {
+    id Long required
+    nome String
+    codigoCnj BigDecimal
+}
+
+paginate Comarca with pagination
+//dto Comarca with mapstruct
+service Comarca with serviceClass
+filter Comarca

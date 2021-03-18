@@ -2,8 +2,6 @@ package br.com.cidha.service;
 
 import br.com.cidha.domain.Processo;
 import br.com.cidha.repository.ProcessoRepository;
-import br.com.cidha.service.dto.ProcessoDTO;
-import br.com.cidha.service.mapper.ProcessoMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,24 +20,19 @@ public class ProcessoService {
 
     private final ProcessoRepository processoRepository;
 
-    private final ProcessoMapper processoMapper;
-
-    public ProcessoService(ProcessoRepository processoRepository, ProcessoMapper processoMapper) {
+    public ProcessoService(ProcessoRepository processoRepository) {
         this.processoRepository = processoRepository;
-        this.processoMapper = processoMapper;
     }
 
     /**
      * Save a processo.
      *
-     * @param processoDTO the entity to save.
+     * @param processo the entity to save.
      * @return the persisted entity.
      */
-    public ProcessoDTO save(ProcessoDTO processoDTO) {
-        log.debug("Request to save Processo : {}", processoDTO);
-        Processo processo = processoMapper.toEntity(processoDTO);
-        processo = processoRepository.save(processo);
-        return processoMapper.toDto(processo);
+    public Processo save(Processo processo) {
+        log.debug("Request to save Processo : {}", processo);
+        return processoRepository.save(processo);
     }
 
     /**
@@ -49,9 +42,9 @@ public class ProcessoService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<ProcessoDTO> findAll(Pageable pageable) {
+    public Page<Processo> findAll(Pageable pageable) {
         log.debug("Request to get all Processos");
-        return processoRepository.findAll(pageable).map(processoMapper::toDto);
+        return processoRepository.findAll(pageable);
     }
 
     /**
@@ -59,8 +52,8 @@ public class ProcessoService {
      *
      * @return the list of entities.
      */
-    public Page<ProcessoDTO> findAllWithEagerRelationships(Pageable pageable) {
-        return processoRepository.findAllWithEagerRelationships(pageable).map(processoMapper::toDto);
+    public Page<Processo> findAllWithEagerRelationships(Pageable pageable) {
+        return processoRepository.findAllWithEagerRelationships(pageable);
     }
 
     /**
@@ -70,9 +63,9 @@ public class ProcessoService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<ProcessoDTO> findOne(Long id) {
+    public Optional<Processo> findOne(Long id) {
         log.debug("Request to get Processo : {}", id);
-        return processoRepository.findOneWithEagerRelationships(id).map(processoMapper::toDto);
+        return processoRepository.findOneWithEagerRelationships(id);
     }
 
     /**

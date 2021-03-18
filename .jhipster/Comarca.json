@@ -10,22 +10,13 @@
       "fieldType": "BigDecimal"
     }
   ],
-  "relationships": [
-    {
-      "relationshipType": "many-to-many",
-      "otherEntityName": "processo",
-      "otherEntityRelationshipName": "comarca",
-      "relationshipName": "processo",
-      "otherEntityField": "oficio",
-      "ownerSide": false
-    }
-  ],
+  "relationships": [],
   "changelogDate": "20210318131107",
   "entityTableName": "comarca",
-  "dto": "mapstruct",
+  "dto": "no",
   "pagination": "pagination",
   "service": "serviceClass",
-  "jpaMetamodelFiltering": false,
+  "jpaMetamodelFiltering": true,
   "fluentMethods": true,
   "readOnly": false,
   "embedded": false,
