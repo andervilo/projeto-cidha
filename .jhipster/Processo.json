@@ -1,0 +1,51 @@
+{
+  "name": "Processo",
+  "fields": [
+    {
+      "fieldName": "oficio",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assunto",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "linkUnico",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "secaoJudiciaria",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "comarca",
+      "otherEntityRelationshipName": "processo",
+      "relationshipName": "comarca",
+      "otherEntityField": "nome",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "quilombo",
+      "otherEntityRelationshipName": "processo",
+      "relationshipName": "quilombo",
+      "otherEntityField": "nome",
+      "ownerSide": true
+    }
+  ],
+  "changelogDate": "20210318131307",
+  "entityTableName": "processo",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

@@ -1,0 +1,40 @@
+//jhipster import-jdl ./jdl/system.jdl
+entity Comarca
+ {
+    id Long required
+    nome String
+    codigoCnj BigDecimal
+}
+
+entity Quilombo
+ {
+    id Long required
+    nome String
+}
+
+entity Processo
+ {
+    id Long required
+    oficio String
+    assunto TextBlob
+    linkUnico String
+    secaoJudiciaria String
+}
+
+
+paginate Comarca with pagination
+dto Comarca with mapstruct
+service Comarca with serviceClass
+
+paginate Quilombo with pagination
+dto Quilombo with mapstruct
+service Quilombo with serviceClass
+
+paginate Processo with pagination
+dto Processo with mapstruct
+service Processo with serviceClass
+
+relationship ManyToMany {
+  Processo{comarca(nome)} to Comarca{processo(oficio)}
+  Processo{quilombo(nome)} to Quilombo{processo(oficio)}
+}
