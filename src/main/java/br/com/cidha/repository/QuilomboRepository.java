@@ -9,4 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface QuilomboRepository extends JpaRepository<Quilombo, Long> {}
+public interface QuilomboRepository extends JpaRepository<Quilombo, Long>, JpaSpecificationExecutor<Quilombo> {}

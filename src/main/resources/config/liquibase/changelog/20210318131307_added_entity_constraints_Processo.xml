@@ -38,5 +38,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="quilombo"/>
         
+        <addForeignKeyConstraint baseColumnNames="tipo_decisao_id"
+                                 baseTableName="processo"
+                                 constraintName="fk_processo_tipo_decisao_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tipo_decisao"/>
+
     </changeSet>
 </databaseChangeLog>

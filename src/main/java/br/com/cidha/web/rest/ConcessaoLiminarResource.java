@@ -1,7 +1,9 @@
 package br.com.cidha.web.rest;
 
 import br.com.cidha.domain.ConcessaoLiminar;
+import br.com.cidha.service.ConcessaoLiminarQueryService;
 import br.com.cidha.service.ConcessaoLiminarService;
+import br.com.cidha.service.dto.ConcessaoLiminarCriteria;
 import br.com.cidha.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -36,8 +38,14 @@ public class ConcessaoLiminarResource {
 
     private final ConcessaoLiminarService concessaoLiminarService;
 
-    public ConcessaoLiminarResource(ConcessaoLiminarService concessaoLiminarService) {
+    private final ConcessaoLiminarQueryService concessaoLiminarQueryService;
+
+    public ConcessaoLiminarResource(
+        ConcessaoLiminarService concessaoLiminarService,
+        ConcessaoLiminarQueryService concessaoLiminarQueryService
+    ) {
         this.concessaoLiminarService = concessaoLiminarService;
+        this.concessaoLiminarQueryService = concessaoLiminarQueryService;
     }
 
     /**
@@ -88,14 +96,27 @@ public class ConcessaoLiminarResource {
      * {@code GET  /concessao-liminars} : get all the concessaoLiminars.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of concessaoLiminars in body.
      */
     @GetMapping("/concessao-liminars")
-    public ResponseEntity<List<ConcessaoLiminar>> getAllConcessaoLiminars(Pageable pageable) {
-        log.debug("REST request to get a page of ConcessaoLiminars");
-        Page<ConcessaoLiminar> page = concessaoLiminarService.findAll(pageable);
+    public ResponseEntity<List<ConcessaoLiminar>> getAllConcessaoLiminars(ConcessaoLiminarCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get ConcessaoLiminars by criteria: {}", criteria);
+        Page<ConcessaoLiminar> page = concessaoLiminarQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /concessao-liminars/count} : count all the concessaoLiminars.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/concessao-liminars/count")
+    public ResponseEntity<Long> countConcessaoLiminars(ConcessaoLiminarCriteria criteria) {
+        log.debug("REST request to count ConcessaoLiminars by criteria: {}", criteria);
+        return ResponseEntity.ok().body(concessaoLiminarQueryService.countByCriteria(criteria));
     }
 
     /**

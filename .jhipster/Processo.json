@@ -54,7 +54,7 @@
       "otherEntityName": "concessaoLiminar",
       "otherEntityRelationshipName": "processo",
       "relationshipName": "concessaoLiminar",
-      "otherEntityField": "id"
+      "otherEntityField": "descricao"
     },
     {
       "relationshipType": "many-to-many",
@@ -71,6 +71,13 @@
       "relationshipName": "quilombo",
       "otherEntityField": "nome",
       "ownerSide": true
+    },
+    {
+      "relationshipName": "tipoDecisao",
+      "otherEntityName": "tipoDecisao",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "descricao",
+      "otherEntityRelationshipName": "processo"
     }
   ],
   "changelogDate": "20210318131307",
@@ -78,10 +85,12 @@
   "dto": "no",
   "pagination": "pagination",
   "service": "serviceClass",
-  "jpaMetamodelFiltering": false,
+  "jpaMetamodelFiltering": true,
   "fluentMethods": true,
   "readOnly": false,
   "embedded": false,
   "clientRootFolder": "",
-  "applications": "*"
+  "applications": "*",
+  "searchEngine": false,
+  "databaseType": "sql"
 }

@@ -130,6 +130,9 @@ export const Processo = (props: IProcessoProps) => {
                 <th>
                   <Translate contentKey="cidhaApp.processo.concessaoLiminar">Concessao Liminar</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
+                <th>
+                  <Translate contentKey="cidhaApp.processo.tipoDecisao">Tipo Decisao</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
                 <th />
               </tr>
             </thead>
@@ -154,7 +157,14 @@ export const Processo = (props: IProcessoProps) => {
                   <td>{processo.parecer ? 'true' : 'false'}</td>
                   <td>
                     {processo.concessaoLiminar ? (
-                      <Link to={`concessao-liminar/${processo.concessaoLiminar.id}`}>{processo.concessaoLiminar.id}</Link>
+                      <Link to={`concessao-liminar/${processo.concessaoLiminar.id}`}>{processo.concessaoLiminar.descricao}</Link>
+                    ) : (
+                      ''
+                    )}
+                  </td>
+                  <td>
+                    {processo.tipoDecisao ? (
+                      <Link to={`tipo-decisao/${processo.tipoDecisao.id}`}>{processo.tipoDecisao.descricao}</Link>
                     ) : (
                       ''
                     )}

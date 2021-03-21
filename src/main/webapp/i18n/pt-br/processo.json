@@ -29,7 +29,8 @@
       "parecer": "Parecer",
       "concessaoLiminar": "Concessao Liminar",
       "comarca": "Comarca",
-      "quilombo": "Quilombo"
+      "quilombo": "Quilombo",
+      "tipoDecisao": "Tipo Decisao"
     }
   }
 }

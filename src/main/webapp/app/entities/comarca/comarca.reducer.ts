@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction, ICrudSearchAction } from 'react-jhipster';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
@@ -101,8 +101,22 @@ const apiUrl = 'api/comarcas';
 
 // Actions
 
-export const getEntities: ICrudGetAllAction<IComarca> = (page, size, sort) => {
+/*export const getEntities: ICrudSearchAction<IComarca> = (query, page, size, sort) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+  return {
+    type: ACTION_TYPES.FETCH_COMARCA_LIST,
+    payload: axios.get<IComarca>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`),
+  };
+};*/
+
+export const getEntities: ICrudSearchAction<IComarca> = (query, page, size, sort) => {
+  let requestUrl = null;
+  if (query) {
+    requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&${query}` : ''}`;
+  } else {
+    requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+  }
+
   return {
     type: ACTION_TYPES.FETCH_COMARCA_LIST,
     payload: axios.get<IComarca>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`),

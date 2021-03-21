@@ -86,6 +86,12 @@ public class ComarcaQueryService extends QueryService<Comarca> {
             if (criteria.getCodigoCnj() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getCodigoCnj(), Comarca_.codigoCnj));
             }
+            if (criteria.getProcessoId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getProcessoId(), root -> root.join(Comarca_.processos, JoinType.LEFT).get(Processo_.id))
+                    );
+            }
         }
         return specification;
     }

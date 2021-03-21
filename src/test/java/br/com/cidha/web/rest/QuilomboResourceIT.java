@@ -6,9 +6,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import br.com.cidha.CidhaApp;
+import br.com.cidha.domain.Processo;
 import br.com.cidha.domain.Quilombo;
 import br.com.cidha.repository.QuilomboRepository;
+import br.com.cidha.service.QuilomboQueryService;
 import br.com.cidha.service.QuilomboService;
+import br.com.cidha.service.dto.QuilomboCriteria;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +39,9 @@ public class QuilomboResourceIT {
 
     @Autowired
     private QuilomboService quilomboService;
+
+    @Autowired
+    private QuilomboQueryService quilomboQueryService;
 
     @Autowired
     private EntityManager em;
@@ -134,6 +140,159 @@ public class QuilomboResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(quilombo.getId().intValue()))
             .andExpect(jsonPath("$.nome").value(DEFAULT_NOME));
+    }
+
+    @Test
+    @Transactional
+    public void getQuilombosByIdFiltering() throws Exception {
+        // Initialize the database
+        quilomboRepository.saveAndFlush(quilombo);
+
+        Long id = quilombo.getId();
+
+        defaultQuilomboShouldBeFound("id.equals=" + id);
+        defaultQuilomboShouldNotBeFound("id.notEquals=" + id);
+
+        defaultQuilomboShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultQuilomboShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultQuilomboShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultQuilomboShouldNotBeFound("id.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    public void getAllQuilombosByNomeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        quilomboRepository.saveAndFlush(quilombo);
+
+        // Get all the quilomboList where nome equals to DEFAULT_NOME
+        defaultQuilomboShouldBeFound("nome.equals=" + DEFAULT_NOME);
+
+        // Get all the quilomboList where nome equals to UPDATED_NOME
+        defaultQuilomboShouldNotBeFound("nome.equals=" + UPDATED_NOME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllQuilombosByNomeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        quilomboRepository.saveAndFlush(quilombo);
+
+        // Get all the quilomboList where nome not equals to DEFAULT_NOME
+        defaultQuilomboShouldNotBeFound("nome.notEquals=" + DEFAULT_NOME);
+
+        // Get all the quilomboList where nome not equals to UPDATED_NOME
+        defaultQuilomboShouldBeFound("nome.notEquals=" + UPDATED_NOME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllQuilombosByNomeIsInShouldWork() throws Exception {
+        // Initialize the database
+        quilomboRepository.saveAndFlush(quilombo);
+
+        // Get all the quilomboList where nome in DEFAULT_NOME or UPDATED_NOME
+        defaultQuilomboShouldBeFound("nome.in=" + DEFAULT_NOME + "," + UPDATED_NOME);
+
+        // Get all the quilomboList where nome equals to UPDATED_NOME
+        defaultQuilomboShouldNotBeFound("nome.in=" + UPDATED_NOME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllQuilombosByNomeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        quilomboRepository.saveAndFlush(quilombo);
+
+        // Get all the quilomboList where nome is not null
+        defaultQuilomboShouldBeFound("nome.specified=true");
+
+        // Get all the quilomboList where nome is null
+        defaultQuilomboShouldNotBeFound("nome.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllQuilombosByNomeContainsSomething() throws Exception {
+        // Initialize the database
+        quilomboRepository.saveAndFlush(quilombo);
+
+        // Get all the quilomboList where nome contains DEFAULT_NOME
+        defaultQuilomboShouldBeFound("nome.contains=" + DEFAULT_NOME);
+
+        // Get all the quilomboList where nome contains UPDATED_NOME
+        defaultQuilomboShouldNotBeFound("nome.contains=" + UPDATED_NOME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllQuilombosByNomeNotContainsSomething() throws Exception {
+        // Initialize the database
+        quilomboRepository.saveAndFlush(quilombo);
+
+        // Get all the quilomboList where nome does not contain DEFAULT_NOME
+        defaultQuilomboShouldNotBeFound("nome.doesNotContain=" + DEFAULT_NOME);
+
+        // Get all the quilomboList where nome does not contain UPDATED_NOME
+        defaultQuilomboShouldBeFound("nome.doesNotContain=" + UPDATED_NOME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllQuilombosByProcessoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        quilomboRepository.saveAndFlush(quilombo);
+        Processo processo = ProcessoResourceIT.createEntity(em);
+        em.persist(processo);
+        em.flush();
+        quilombo.addProcesso(processo);
+        quilomboRepository.saveAndFlush(quilombo);
+        Long processoId = processo.getId();
+
+        // Get all the quilomboList where processo equals to processoId
+        defaultQuilomboShouldBeFound("processoId.equals=" + processoId);
+
+        // Get all the quilomboList where processo equals to processoId + 1
+        defaultQuilomboShouldNotBeFound("processoId.equals=" + (processoId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultQuilomboShouldBeFound(String filter) throws Exception {
+        restQuilomboMockMvc
+            .perform(get("/api/quilombos?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(quilombo.getId().intValue())))
+            .andExpect(jsonPath("$.[*].nome").value(hasItem(DEFAULT_NOME)));
+
+        // Check, that the count call also returns 1
+        restQuilomboMockMvc
+            .perform(get("/api/quilombos/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultQuilomboShouldNotBeFound(String filter) throws Exception {
+        restQuilomboMockMvc
+            .perform(get("/api/quilombos?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restQuilomboMockMvc
+            .perform(get("/api/quilombos/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
     }
 
     @Test

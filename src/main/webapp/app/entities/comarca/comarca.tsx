@@ -6,21 +6,32 @@ import { Translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPa
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './comarca.reducer';
+import { getEntities, reset } from './comarca.reducer';
 import { IComarca } from 'app/shared/model/comarca.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
+import Filter from 'app/shared/hooks/filter';
 
 export interface IComarcaProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export const Comarca = (props: IComarcaProps) => {
+  const [query, setQuery] = useState('');
+
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE), props.location.search)
   );
 
   const getAllEntities = () => {
-    props.getEntities(paginationState.activePage - 1, paginationState.itemsPerPage, `${paginationState.sort},${paginationState.order}`);
+    if (query) {      
+      props.getEntities(query, paginationState.activePage - 1, 
+      paginationState.itemsPerPage, 
+      `${paginationState.sort},${paginationState.order}`);
+    } else {
+      props.getEntities(null, paginationState.activePage - 1, 
+        paginationState.itemsPerPage, 
+        `${paginationState.sort},${paginationState.order}`);
+    }
   };
 
   const sortEntities = () => {
@@ -58,6 +69,16 @@ export const Comarca = (props: IComarcaProps) => {
     });
   };
 
+  const clear = () => {
+    props.reset();
+    setQuery('');
+    setPaginationState({
+      ...paginationState,
+      activePage: 1,
+    });
+    props.getEntities();
+  };
+
   const handlePagination = currentPage =>
     setPaginationState({
       ...paginationState,
@@ -75,6 +96,15 @@ export const Comarca = (props: IComarcaProps) => {
           <Translate contentKey="cidhaApp.comarca.home.createLabel">Create new Comarca</Translate>
         </Link>
       </h2>
+      
+      <Filter filter="nome.contains" 
+      placeholder="Filtrar Comarcas por nome" 
+      btnOnClickClear={clear} onSubmit={getAllEntities} setQuery={setQuery}/>
+
+      <Filter filter="codigoCnj.equals" 
+      placeholder="Filtrar Comarcas por código CNJ" 
+      btnOnClickClear={clear} onSubmit={getAllEntities} setQuery={setQuery}/>
+
       <div className="table-responsive">
         {comarcaList && comarcaList.length > 0 ? (
           <Table responsive>
@@ -176,6 +206,7 @@ const mapStateToProps = ({ comarca }: IRootState) => ({
 
 const mapDispatchToProps = {
   getEntities,
+  reset,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

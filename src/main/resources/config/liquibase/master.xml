@@ -21,6 +21,7 @@
 <!--     <include file="config/liquibase/changelog/20210318134938_add_fields_processos_01.xml" relativeToChangelogFile="false"/> -->
 <!--     <include file="config/liquibase/changelog/20210318131307_added_entity_Processo.xml" relativeToChangelogFile="false"/> -->
 <!--     <include file="config/liquibase/changelog/20210318151938_added_entity_ConcessaoLiminar.xml" relativeToChangelogFile="false"/> -->
+    <include file="config/liquibase/changelog/20210319002142_added_entity_TipoDecisao.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
 <!--     <include file="config/liquibase/changelog/20210318131307_added_entity_constraints_Processo.xml" relativeToChangelogFile="false"/> -->
 <!--     <include file="config/liquibase/changelog/20210318145322_add_fields_processos_02.xml" relativeToChangelogFile="false"/> -->

@@ -1,7 +1,9 @@
 package br.com.cidha.web.rest;
 
 import br.com.cidha.domain.Processo;
+import br.com.cidha.service.ProcessoQueryService;
 import br.com.cidha.service.ProcessoService;
+import br.com.cidha.service.dto.ProcessoCriteria;
 import br.com.cidha.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -36,8 +38,11 @@ public class ProcessoResource {
 
     private final ProcessoService processoService;
 
-    public ProcessoResource(ProcessoService processoService) {
+    private final ProcessoQueryService processoQueryService;
+
+    public ProcessoResource(ProcessoService processoService, ProcessoQueryService processoQueryService) {
         this.processoService = processoService;
+        this.processoQueryService = processoQueryService;
     }
 
     /**
@@ -86,23 +91,27 @@ public class ProcessoResource {
      * {@code GET  /processos} : get all the processos.
      *
      * @param pageable the pagination information.
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of processos in body.
      */
     @GetMapping("/processos")
-    public ResponseEntity<List<Processo>> getAllProcessos(
-        Pageable pageable,
-        @RequestParam(required = false, defaultValue = "false") boolean eagerload
-    ) {
-        log.debug("REST request to get a page of Processos");
-        Page<Processo> page;
-        if (eagerload) {
-            page = processoService.findAllWithEagerRelationships(pageable);
-        } else {
-            page = processoService.findAll(pageable);
-        }
+    public ResponseEntity<List<Processo>> getAllProcessos(ProcessoCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get Processos by criteria: {}", criteria);
+        Page<Processo> page = processoQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /processos/count} : count all the processos.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/processos/count")
+    public ResponseEntity<Long> countProcessos(ProcessoCriteria criteria) {
+        log.debug("REST request to count Processos by criteria: {}", criteria);
+        return ResponseEntity.ok().body(processoQueryService.countByCriteria(criteria));
     }
 
     /**

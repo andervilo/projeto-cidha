@@ -1,7 +1,10 @@
 package br.com.cidha.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -25,6 +28,11 @@ public class Comarca implements Serializable {
 
     @Column(name = "codigo_cnj", precision = 21, scale = 2)
     private BigDecimal codigoCnj;
+
+    @ManyToMany(mappedBy = "comarcas")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnore
+    private Set<Processo> processos = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -59,6 +67,31 @@ public class Comarca implements Serializable {
 
     public void setCodigoCnj(BigDecimal codigoCnj) {
         this.codigoCnj = codigoCnj;
+    }
+
+    public Set<Processo> getProcessos() {
+        return processos;
+    }
+
+    public Comarca processos(Set<Processo> processos) {
+        this.processos = processos;
+        return this;
+    }
+
+    public Comarca addProcesso(Processo processo) {
+        this.processos.add(processo);
+        processo.getComarcas().add(this);
+        return this;
+    }
+
+    public Comarca removeProcesso(Processo processo) {
+        this.processos.remove(processo);
+        processo.getComarcas().remove(this);
+        return this;
+    }
+
+    public void setProcessos(Set<Processo> processos) {
+        this.processos = processos;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

@@ -1,6 +1,7 @@
 import { IConcessaoLiminar } from 'app/shared/model/concessao-liminar.model';
 import { IComarca } from 'app/shared/model/comarca.model';
 import { IQuilombo } from 'app/shared/model/quilombo.model';
+import { ITipoDecisao } from 'app/shared/model/tipo-decisao.model';
 
 export interface IProcesso {
   id?: number;
@@ -18,6 +19,7 @@ export interface IProcesso {
   concessaoLiminar?: IConcessaoLiminar;
   comarcas?: IComarca[];
   quilombos?: IQuilombo[];
+  tipoDecisao?: ITipoDecisao;
 }
 
 export const defaultValue: Readonly<IProcesso> = {

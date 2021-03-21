@@ -8,7 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import br.com.cidha.CidhaApp;
 import br.com.cidha.domain.ConcessaoLiminar;
 import br.com.cidha.repository.ConcessaoLiminarRepository;
+import br.com.cidha.service.ConcessaoLiminarQueryService;
 import br.com.cidha.service.ConcessaoLiminarService;
+import br.com.cidha.service.dto.ConcessaoLiminarCriteria;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,6 +39,9 @@ public class ConcessaoLiminarResourceIT {
 
     @Autowired
     private ConcessaoLiminarService concessaoLiminarService;
+
+    @Autowired
+    private ConcessaoLiminarQueryService concessaoLiminarQueryService;
 
     @Autowired
     private EntityManager em;
@@ -143,6 +148,62 @@ public class ConcessaoLiminarResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(concessaoLiminar.getId().intValue()))
             .andExpect(jsonPath("$.descricao").value(DEFAULT_DESCRICAO.toString()));
+    }
+
+    @Test
+    @Transactional
+    public void getConcessaoLiminarsByIdFiltering() throws Exception {
+        // Initialize the database
+        concessaoLiminarRepository.saveAndFlush(concessaoLiminar);
+
+        Long id = concessaoLiminar.getId();
+
+        defaultConcessaoLiminarShouldBeFound("id.equals=" + id);
+        defaultConcessaoLiminarShouldNotBeFound("id.notEquals=" + id);
+
+        defaultConcessaoLiminarShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultConcessaoLiminarShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultConcessaoLiminarShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultConcessaoLiminarShouldNotBeFound("id.lessThan=" + id);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultConcessaoLiminarShouldBeFound(String filter) throws Exception {
+        restConcessaoLiminarMockMvc
+            .perform(get("/api/concessao-liminars?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(concessaoLiminar.getId().intValue())))
+            .andExpect(jsonPath("$.[*].descricao").value(hasItem(DEFAULT_DESCRICAO.toString())));
+
+        // Check, that the count call also returns 1
+        restConcessaoLiminarMockMvc
+            .perform(get("/api/concessao-liminars/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultConcessaoLiminarShouldNotBeFound(String filter) throws Exception {
+        restConcessaoLiminarMockMvc
+            .perform(get("/api/concessao-liminars?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restConcessaoLiminarMockMvc
+            .perform(get("/api/concessao-liminars/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
     }
 
     @Test

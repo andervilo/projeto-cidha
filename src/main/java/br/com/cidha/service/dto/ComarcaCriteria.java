@@ -30,12 +30,15 @@ public class ComarcaCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter codigoCnj;
 
+    private LongFilter processoId;
+
     public ComarcaCriteria() {}
 
     public ComarcaCriteria(ComarcaCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.nome = other.nome == null ? null : other.nome.copy();
         this.codigoCnj = other.codigoCnj == null ? null : other.codigoCnj.copy();
+        this.processoId = other.processoId == null ? null : other.processoId.copy();
     }
 
     @Override
@@ -67,6 +70,14 @@ public class ComarcaCriteria implements Serializable, Criteria {
         this.codigoCnj = codigoCnj;
     }
 
+    public LongFilter getProcessoId() {
+        return processoId;
+    }
+
+    public void setProcessoId(LongFilter processoId) {
+        this.processoId = processoId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -76,12 +87,17 @@ public class ComarcaCriteria implements Serializable, Criteria {
             return false;
         }
         final ComarcaCriteria that = (ComarcaCriteria) o;
-        return Objects.equals(id, that.id) && Objects.equals(nome, that.nome) && Objects.equals(codigoCnj, that.codigoCnj);
+        return (
+            Objects.equals(id, that.id) &&
+            Objects.equals(nome, that.nome) &&
+            Objects.equals(codigoCnj, that.codigoCnj) &&
+            Objects.equals(processoId, that.processoId)
+        );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nome, codigoCnj);
+        return Objects.hash(id, nome, codigoCnj, processoId);
     }
 
     // prettier-ignore
@@ -91,6 +107,7 @@ public class ComarcaCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (nome != null ? "nome=" + nome + ", " : "") +
                 (codigoCnj != null ? "codigoCnj=" + codigoCnj + ", " : "") +
+                (processoId != null ? "processoId=" + processoId + ", " : "") +
             "}";
     }
 }

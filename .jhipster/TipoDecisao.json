@@ -1,0 +1,27 @@
+{
+  "fluentMethods": true,
+  "clientRootFolder": "",
+  "relationships": [
+    {
+      "relationshipName": "processo",
+      "otherEntityName": "processo",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "tipoDecisao"
+    }
+  ],
+  "fields": [
+    {
+      "fieldName": "descricao",
+      "fieldType": "String"
+    }
+  ],
+  "changelogDate": "20210319002142",
+  "dto": "no",
+  "searchEngine": false,
+  "service": "serviceImpl",
+  "entityTableName": "tipo_decisao",
+  "databaseType": "sql",
+  "readOnly": false,
+  "jpaMetamodelFiltering": true,
+  "pagination": "pagination"
+}

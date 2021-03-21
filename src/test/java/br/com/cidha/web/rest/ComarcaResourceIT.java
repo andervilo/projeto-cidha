@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import br.com.cidha.CidhaApp;
 import br.com.cidha.domain.Comarca;
+import br.com.cidha.domain.Processo;
 import br.com.cidha.repository.ComarcaRepository;
 import br.com.cidha.service.ComarcaQueryService;
 import br.com.cidha.service.ComarcaService;
@@ -347,6 +348,25 @@ public class ComarcaResourceIT {
 
         // Get all the comarcaList where codigoCnj is greater than SMALLER_CODIGO_CNJ
         defaultComarcaShouldBeFound("codigoCnj.greaterThan=" + SMALLER_CODIGO_CNJ);
+    }
+
+    @Test
+    @Transactional
+    public void getAllComarcasByProcessoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        comarcaRepository.saveAndFlush(comarca);
+        Processo processo = ProcessoResourceIT.createEntity(em);
+        em.persist(processo);
+        em.flush();
+        comarca.addProcesso(processo);
+        comarcaRepository.saveAndFlush(comarca);
+        Long processoId = processo.getId();
+
+        // Get all the comarcaList where processo equals to processoId
+        defaultComarcaShouldBeFound("processoId.equals=" + processoId);
+
+        // Get all the comarcaList where processo equals to processoId + 1
+        defaultComarcaShouldNotBeFound("processoId.equals=" + (processoId + 1));
     }
 
     /**

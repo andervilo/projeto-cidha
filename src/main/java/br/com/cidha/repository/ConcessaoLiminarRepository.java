@@ -9,4 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ConcessaoLiminarRepository extends JpaRepository<ConcessaoLiminar, Long> {}
+public interface ConcessaoLiminarRepository extends JpaRepository<ConcessaoLiminar, Long>, JpaSpecificationExecutor<ConcessaoLiminar> {}

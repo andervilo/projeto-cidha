@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction, ICrudSearchAction } from 'react-jhipster';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
@@ -101,8 +101,14 @@ const apiUrl = 'api/quilombos';
 
 // Actions
 
-export const getEntities: ICrudGetAllAction<IQuilombo> = (page, size, sort) => {
-  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+export const getEntities: ICrudSearchAction<IQuilombo> = (query, page, size, sort) => {
+  let requestUrl = null;
+  if (query) {
+    requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&${query}` : ''}`;
+  } else {
+    requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+  }
+
   return {
     type: ACTION_TYPES.FETCH_QUILOMBO_LIST,
     payload: axios.get<IQuilombo>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`),

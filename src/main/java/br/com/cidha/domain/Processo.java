@@ -82,6 +82,10 @@ public class Processo implements Serializable {
     )
     private Set<Quilombo> quilombos = new HashSet<>();
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = "processos", allowSetters = true)
+    private TipoDecisao tipoDecisao;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -295,6 +299,19 @@ public class Processo implements Serializable {
 
     public void setQuilombos(Set<Quilombo> quilombos) {
         this.quilombos = quilombos;
+    }
+
+    public TipoDecisao getTipoDecisao() {
+        return tipoDecisao;
+    }
+
+    public Processo tipoDecisao(TipoDecisao tipoDecisao) {
+        this.tipoDecisao = tipoDecisao;
+        return this;
+    }
+
+    public void setTipoDecisao(TipoDecisao tipoDecisao) {
+        this.tipoDecisao = tipoDecisao;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

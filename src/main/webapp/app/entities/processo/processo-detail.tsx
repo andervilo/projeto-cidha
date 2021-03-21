@@ -100,7 +100,7 @@ export const ProcessoDetail = (props: IProcessoDetailProps) => {
           <dt>
             <Translate contentKey="cidhaApp.processo.concessaoLiminar">Concessao Liminar</Translate>
           </dt>
-          <dd>{processoEntity.concessaoLiminar ? processoEntity.concessaoLiminar.id : ''}</dd>
+          <dd>{processoEntity.concessaoLiminar ? processoEntity.concessaoLiminar.descricao : ''}</dd>
           <dt>
             <Translate contentKey="cidhaApp.processo.comarca">Comarca</Translate>
           </dt>
@@ -127,6 +127,10 @@ export const ProcessoDetail = (props: IProcessoDetailProps) => {
                 ))
               : null}
           </dd>
+          <dt>
+            <Translate contentKey="cidhaApp.processo.tipoDecisao">Tipo Decisao</Translate>
+          </dt>
+          <dd>{processoEntity.tipoDecisao ? processoEntity.tipoDecisao.descricao : ''}</dd>
         </dl>
         <Button tag={Link} to="/processo" replace color="info">
           <FontAwesomeIcon icon="arrow-left" />{' '}

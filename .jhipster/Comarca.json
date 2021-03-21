@@ -10,7 +10,16 @@
       "fieldType": "BigDecimal"
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "processo",
+      "otherEntityRelationshipName": "comarca",
+      "relationshipName": "processo",
+      "otherEntityField": "oficio",
+      "ownerSide": false
+    }
+  ],
   "changelogDate": "20210318131107",
   "entityTableName": "comarca",
   "dto": "no",

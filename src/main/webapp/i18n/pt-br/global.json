@@ -11,6 +11,7 @@
         "quilombo": "Quilombo",
         "processo": "Processo",
         "concessaoLiminar": "Concessao Liminar",
+        "tipoDecisao": "Tipo Decisao",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

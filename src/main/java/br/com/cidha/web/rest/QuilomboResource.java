@@ -1,7 +1,9 @@
 package br.com.cidha.web.rest;
 
 import br.com.cidha.domain.Quilombo;
+import br.com.cidha.service.QuilomboQueryService;
 import br.com.cidha.service.QuilomboService;
+import br.com.cidha.service.dto.QuilomboCriteria;
 import br.com.cidha.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -36,8 +38,11 @@ public class QuilomboResource {
 
     private final QuilomboService quilomboService;
 
-    public QuilomboResource(QuilomboService quilomboService) {
+    private final QuilomboQueryService quilomboQueryService;
+
+    public QuilomboResource(QuilomboService quilomboService, QuilomboQueryService quilomboQueryService) {
         this.quilomboService = quilomboService;
+        this.quilomboQueryService = quilomboQueryService;
     }
 
     /**
@@ -50,6 +55,7 @@ public class QuilomboResource {
     @PostMapping("/quilombos")
     public ResponseEntity<Quilombo> createQuilombo(@RequestBody Quilombo quilombo) throws URISyntaxException {
         log.debug("REST request to save Quilombo : {}", quilombo);
+        log.debug(quilombo.toString());
         if (quilombo.getId() != null) {
             throw new BadRequestAlertException("A new quilombo cannot already have an ID", ENTITY_NAME, "idexists");
         }
@@ -86,14 +92,27 @@ public class QuilomboResource {
      * {@code GET  /quilombos} : get all the quilombos.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of quilombos in body.
      */
     @GetMapping("/quilombos")
-    public ResponseEntity<List<Quilombo>> getAllQuilombos(Pageable pageable) {
-        log.debug("REST request to get a page of Quilombos");
-        Page<Quilombo> page = quilomboService.findAll(pageable);
+    public ResponseEntity<List<Quilombo>> getAllQuilombos(QuilomboCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get Quilombos by criteria: {}", criteria);
+        Page<Quilombo> page = quilomboQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /quilombos/count} : count all the quilombos.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/quilombos/count")
+    public ResponseEntity<Long> countQuilombos(QuilomboCriteria criteria) {
+        log.debug("REST request to count Quilombos by criteria: {}", criteria);
+        return ResponseEntity.ok().body(quilomboQueryService.countByCriteria(criteria));
     }
 
     /**

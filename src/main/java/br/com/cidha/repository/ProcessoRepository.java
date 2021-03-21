@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
  * Spring Data  repository for the Processo entity.
  */
 @Repository
-public interface ProcessoRepository extends JpaRepository<Processo, Long> {
+public interface ProcessoRepository extends JpaRepository<Processo, Long>, JpaSpecificationExecutor<Processo> {
     @Query(
         value = "select distinct processo from Processo processo left join fetch processo.comarcas left join fetch processo.quilombos",
         countQuery = "select count(distinct processo) from Processo processo"

@@ -28,6 +28,10 @@ import processo, {
 import concessaoLiminar, {
   ConcessaoLiminarState
 } from 'app/entities/concessao-liminar/concessao-liminar.reducer';
+// prettier-ignore
+import tipoDecisao, {
+  TipoDecisaoState
+} from 'app/entities/tipo-decisao/tipo-decisao.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
@@ -45,6 +49,7 @@ export interface IRootState {
   readonly quilombo: QuilomboState;
   readonly processo: ProcessoState;
   readonly concessaoLiminar: ConcessaoLiminarState;
+  readonly tipoDecisao: TipoDecisaoState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -64,6 +69,7 @@ const rootReducer = combineReducers<IRootState>({
   quilombo,
   processo,
   concessaoLiminar,
+  tipoDecisao,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
 });

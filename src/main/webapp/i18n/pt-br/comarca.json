@@ -17,7 +17,8 @@
         "title": "Comarca"
       },
       "nome": "Nome",
-      "codigoCnj": "Codigo Cnj"
+      "codigoCnj": "Codigo Cnj",
+      "processo": "Processo"
     }
   }
 }
