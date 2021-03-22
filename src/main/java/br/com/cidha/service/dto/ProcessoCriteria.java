@@ -43,6 +43,10 @@ public class ProcessoCriteria implements Serializable, Criteria {
 
     private BooleanFilter parecer;
 
+    private StringFilter folhasProcessoConcessaoLiminar;
+
+    private StringFilter folhasProcessoCassacao;
+
     private LongFilter concessaoLiminarId;
 
     private LongFilter comarcaId;
@@ -50,6 +54,8 @@ public class ProcessoCriteria implements Serializable, Criteria {
     private LongFilter quilomboId;
 
     private LongFilter tipoDecisaoId;
+
+    private LongFilter concessaoLiminarCassadaId;
 
     public ProcessoCriteria() {}
 
@@ -66,10 +72,14 @@ public class ProcessoCriteria implements Serializable, Criteria {
         this.numeroProcessoJudicialPrimeiraInstanciaLink =
             other.numeroProcessoJudicialPrimeiraInstanciaLink == null ? null : other.numeroProcessoJudicialPrimeiraInstanciaLink.copy();
         this.parecer = other.parecer == null ? null : other.parecer.copy();
+        this.folhasProcessoConcessaoLiminar =
+            other.folhasProcessoConcessaoLiminar == null ? null : other.folhasProcessoConcessaoLiminar.copy();
+        this.folhasProcessoCassacao = other.folhasProcessoCassacao == null ? null : other.folhasProcessoCassacao.copy();
         this.concessaoLiminarId = other.concessaoLiminarId == null ? null : other.concessaoLiminarId.copy();
         this.comarcaId = other.comarcaId == null ? null : other.comarcaId.copy();
         this.quilomboId = other.quilomboId == null ? null : other.quilomboId.copy();
         this.tipoDecisaoId = other.tipoDecisaoId == null ? null : other.tipoDecisaoId.copy();
+        this.concessaoLiminarCassadaId = other.concessaoLiminarCassadaId == null ? null : other.concessaoLiminarCassadaId.copy();
     }
 
     @Override
@@ -157,6 +167,22 @@ public class ProcessoCriteria implements Serializable, Criteria {
         this.parecer = parecer;
     }
 
+    public StringFilter getFolhasProcessoConcessaoLiminar() {
+        return folhasProcessoConcessaoLiminar;
+    }
+
+    public void setFolhasProcessoConcessaoLiminar(StringFilter folhasProcessoConcessaoLiminar) {
+        this.folhasProcessoConcessaoLiminar = folhasProcessoConcessaoLiminar;
+    }
+
+    public StringFilter getFolhasProcessoCassacao() {
+        return folhasProcessoCassacao;
+    }
+
+    public void setFolhasProcessoCassacao(StringFilter folhasProcessoCassacao) {
+        this.folhasProcessoCassacao = folhasProcessoCassacao;
+    }
+
     public LongFilter getConcessaoLiminarId() {
         return concessaoLiminarId;
     }
@@ -189,6 +215,14 @@ public class ProcessoCriteria implements Serializable, Criteria {
         this.tipoDecisaoId = tipoDecisaoId;
     }
 
+    public LongFilter getConcessaoLiminarCassadaId() {
+        return concessaoLiminarCassadaId;
+    }
+
+    public void setConcessaoLiminarCassadaId(LongFilter concessaoLiminarCassadaId) {
+        this.concessaoLiminarCassadaId = concessaoLiminarCassadaId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -209,10 +243,13 @@ public class ProcessoCriteria implements Serializable, Criteria {
             Objects.equals(numeroProcessoJudicialPrimeiraInstancia, that.numeroProcessoJudicialPrimeiraInstancia) &&
             Objects.equals(numeroProcessoJudicialPrimeiraInstanciaLink, that.numeroProcessoJudicialPrimeiraInstanciaLink) &&
             Objects.equals(parecer, that.parecer) &&
+            Objects.equals(folhasProcessoConcessaoLiminar, that.folhasProcessoConcessaoLiminar) &&
+            Objects.equals(folhasProcessoCassacao, that.folhasProcessoCassacao) &&
             Objects.equals(concessaoLiminarId, that.concessaoLiminarId) &&
             Objects.equals(comarcaId, that.comarcaId) &&
             Objects.equals(quilomboId, that.quilomboId) &&
-            Objects.equals(tipoDecisaoId, that.tipoDecisaoId)
+            Objects.equals(tipoDecisaoId, that.tipoDecisaoId) &&
+            Objects.equals(concessaoLiminarCassadaId, that.concessaoLiminarCassadaId)
         );
     }
 
@@ -229,10 +266,13 @@ public class ProcessoCriteria implements Serializable, Criteria {
             numeroProcessoJudicialPrimeiraInstancia,
             numeroProcessoJudicialPrimeiraInstanciaLink,
             parecer,
+            folhasProcessoConcessaoLiminar,
+            folhasProcessoCassacao,
             concessaoLiminarId,
             comarcaId,
             quilomboId,
-            tipoDecisaoId
+            tipoDecisaoId,
+            concessaoLiminarCassadaId
         );
     }
 
@@ -250,10 +290,13 @@ public class ProcessoCriteria implements Serializable, Criteria {
                 (numeroProcessoJudicialPrimeiraInstancia != null ? "numeroProcessoJudicialPrimeiraInstancia=" + numeroProcessoJudicialPrimeiraInstancia + ", " : "") +
                 (numeroProcessoJudicialPrimeiraInstanciaLink != null ? "numeroProcessoJudicialPrimeiraInstanciaLink=" + numeroProcessoJudicialPrimeiraInstanciaLink + ", " : "") +
                 (parecer != null ? "parecer=" + parecer + ", " : "") +
+                (folhasProcessoConcessaoLiminar != null ? "folhasProcessoConcessaoLiminar=" + folhasProcessoConcessaoLiminar + ", " : "") +
+                (folhasProcessoCassacao != null ? "folhasProcessoCassacao=" + folhasProcessoCassacao + ", " : "") +
                 (concessaoLiminarId != null ? "concessaoLiminarId=" + concessaoLiminarId + ", " : "") +
                 (comarcaId != null ? "comarcaId=" + comarcaId + ", " : "") +
                 (quilomboId != null ? "quilomboId=" + quilomboId + ", " : "") +
                 (tipoDecisaoId != null ? "tipoDecisaoId=" + tipoDecisaoId + ", " : "") +
+                (concessaoLiminarCassadaId != null ? "concessaoLiminarCassadaId=" + concessaoLiminarCassadaId + ", " : "") +
             "}";
     }
 }

@@ -46,6 +46,19 @@
     {
       "fieldName": "parecer",
       "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "folhasProcessoConcessaoLiminar",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "concessaoLimnarObservacoes",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "folhasProcessoCassacao",
+      "fieldType": "String"
     }
   ],
   "relationships": [
@@ -75,6 +88,13 @@
     {
       "relationshipName": "tipoDecisao",
       "otherEntityName": "tipoDecisao",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "descricao",
+      "otherEntityRelationshipName": "processo"
+    },
+    {
+      "relationshipName": "concessaoLiminarCassada",
+      "otherEntityName": "concessaoLiminarCassada",
       "relationshipType": "many-to-one",
       "otherEntityField": "descricao",
       "otherEntityRelationshipName": "processo"

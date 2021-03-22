@@ -6,33 +6,21 @@ import { Translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPa
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities, reset } from './comarca.reducer';
-import { IComarca } from 'app/shared/model/comarca.model';
+import { getEntities } from './concessao-liminar-cassada.reducer';
+import { IConcessaoLiminarCassada } from 'app/shared/model/concessao-liminar-cassada.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-import Filter from 'app/shared/hooks/filter';
 
-export interface IComarcaProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
+export interface IConcessaoLiminarCassadaProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export const Comarca = (props: IComarcaProps) => {
-  const [query, setQuery] = useState('');
-  const [forReset, setForReset] = useState(false);
-
+export const ConcessaoLiminarCassada = (props: IConcessaoLiminarCassadaProps) => {
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE), props.location.search)
   );
 
   const getAllEntities = () => {
-    if (query) {      
-      props.getEntities(query, paginationState.activePage - 1, 
-      paginationState.itemsPerPage, 
-      `${paginationState.sort},${paginationState.order}`);
-    } else {
-      props.getEntities(null, paginationState.activePage - 1, 
-        paginationState.itemsPerPage, 
-        `${paginationState.sort},${paginationState.order}`);
-    }
+    props.getEntities(paginationState.activePage - 1, paginationState.itemsPerPage, `${paginationState.sort},${paginationState.order}`);
   };
 
   const sortEntities = () => {
@@ -70,73 +58,49 @@ export const Comarca = (props: IComarcaProps) => {
     });
   };
 
-  const clear = () => {
-    props.reset();
-    setQuery('');
-    setForReset(true);
-    setPaginationState({
-      ...paginationState,
-      activePage: 1,
-    });
-    props.getEntities();
-  };
-
   const handlePagination = currentPage =>
     setPaginationState({
       ...paginationState,
       activePage: currentPage,
     });
 
-  const { comarcaList, match, loading, totalItems } = props;
+  const { concessaoLiminarCassadaList, match, loading, totalItems } = props;
   return (
     <div>
-      <h2 id="comarca-heading">
-        <Translate contentKey="cidhaApp.comarca.home.title">Comarcas</Translate>
+      <h2 id="concessao-liminar-cassada-heading">
+        <Translate contentKey="cidhaApp.concessaoLiminarCassada.home.title">Concessao Liminar Cassadas</Translate>
         <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
           <FontAwesomeIcon icon="plus" />
           &nbsp;
-          <Translate contentKey="cidhaApp.comarca.home.createLabel">Create new Comarca</Translate>
+          <Translate contentKey="cidhaApp.concessaoLiminarCassada.home.createLabel">Create new Concessao Liminar Cassada</Translate>
         </Link>
       </h2>
-      
-      <Filter filter="nome.contains" 
-      placeholder="Filtrar Comarcas por nome" 
-      btnOnClickClear={clear} onSubmit={getAllEntities} setQuery={setQuery} isForReset={forReset}/>
-
-      <Filter filter="codigoCnj.equals" 
-      placeholder="Filtrar Comarcas por código CNJ" 
-      btnOnClickClear={clear} onSubmit={getAllEntities} setQuery={setQuery} isForReset={forReset}/>
-
       <div className="table-responsive">
-        {comarcaList && comarcaList.length > 0 ? (
+        {concessaoLiminarCassadaList && concessaoLiminarCassadaList.length > 0 ? (
           <Table responsive>
             <thead>
               <tr>
                 <th className="hand" onClick={sort('id')}>
                   <Translate contentKey="global.field.id">ID</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
-                <th className="hand" onClick={sort('nome')}>
-                  <Translate contentKey="cidhaApp.comarca.nome">Nome</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('codigoCnj')}>
-                  <Translate contentKey="cidhaApp.comarca.codigoCnj">Codigo Cnj</Translate> <FontAwesomeIcon icon="sort" />
+                <th className="hand" onClick={sort('descricao')}>
+                  <Translate contentKey="cidhaApp.concessaoLiminarCassada.descricao">Descricao</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
             </thead>
             <tbody>
-              {comarcaList.map((comarca, i) => (
+              {concessaoLiminarCassadaList.map((concessaoLiminarCassada, i) => (
                 <tr key={`entity-${i}`}>
                   <td>
-                    <Button tag={Link} to={`${match.url}/${comarca.id}`} color="link" size="sm">
-                      {comarca.id}
+                    <Button tag={Link} to={`${match.url}/${concessaoLiminarCassada.id}`} color="link" size="sm">
+                      {concessaoLiminarCassada.id}
                     </Button>
                   </td>
-                  <td>{comarca.nome}</td>
-                  <td>{comarca.codigoCnj}</td>
+                  <td>{concessaoLiminarCassada.descricao}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`${match.url}/${comarca.id}`} color="info" size="sm">
+                      <Button tag={Link} to={`${match.url}/${concessaoLiminarCassada.id}`} color="info" size="sm">
                         <FontAwesomeIcon icon="eye" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.view">View</Translate>
@@ -144,7 +108,7 @@ export const Comarca = (props: IComarcaProps) => {
                       </Button>
                       <Button
                         tag={Link}
-                        to={`${match.url}/${comarca.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                        to={`${match.url}/${concessaoLiminarCassada.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
                         color="primary"
                         size="sm"
                       >
@@ -155,7 +119,7 @@ export const Comarca = (props: IComarcaProps) => {
                       </Button>
                       <Button
                         tag={Link}
-                        to={`${match.url}/${comarca.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                        to={`${match.url}/${concessaoLiminarCassada.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
                         color="danger"
                         size="sm"
                       >
@@ -173,13 +137,13 @@ export const Comarca = (props: IComarcaProps) => {
         ) : (
           !loading && (
             <div className="alert alert-warning">
-              <Translate contentKey="cidhaApp.comarca.home.notFound">No Comarcas found</Translate>
+              <Translate contentKey="cidhaApp.concessaoLiminarCassada.home.notFound">No Concessao Liminar Cassadas found</Translate>
             </div>
           )
         )}
       </div>
       {props.totalItems ? (
-        <div className={comarcaList && comarcaList.length > 0 ? '' : 'd-none'}>
+        <div className={concessaoLiminarCassadaList && concessaoLiminarCassadaList.length > 0 ? '' : 'd-none'}>
           <Row className="justify-content-center">
             <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} i18nEnabled />
           </Row>
@@ -200,18 +164,17 @@ export const Comarca = (props: IComarcaProps) => {
   );
 };
 
-const mapStateToProps = ({ comarca }: IRootState) => ({
-  comarcaList: comarca.entities,
-  loading: comarca.loading,
-  totalItems: comarca.totalItems,
+const mapStateToProps = ({ concessaoLiminarCassada }: IRootState) => ({
+  concessaoLiminarCassadaList: concessaoLiminarCassada.entities,
+  loading: concessaoLiminarCassada.loading,
+  totalItems: concessaoLiminarCassada.totalItems,
 });
 
 const mapDispatchToProps = {
   getEntities,
-  reset,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Comarca);
+export default connect(mapStateToProps, mapDispatchToProps)(ConcessaoLiminarCassada);

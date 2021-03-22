@@ -8,7 +8,8 @@ const Filter = ({
         btnOnClickClear,
         setQuery,
         filter = "",
-        placeholder = ""
+        placeholder = "",
+        isForReset
     }) => {
         const handleSearch = event =>{
             setSearch(event.target.value);
@@ -16,9 +17,15 @@ const Filter = ({
         }
 
         const clearFilter = () =>{
-            setSearch('');
+            
             btnOnClickClear();
         }
+
+        useEffect(() => {
+          return () => {
+            setSearch('');
+          };
+        }, [isForReset])
 
         const [search, setSearch] = useState('');
     return (

@@ -44,5 +44,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="tipo_decisao"/>
 
+        <addForeignKeyConstraint baseColumnNames="concessao_liminar_cassada_id"
+                                 baseTableName="processo"
+                                 constraintName="fk_processo_concessao_liminar_cassada_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="concessao_liminar_cassada"/>
+
     </changeSet>
 </databaseChangeLog>

@@ -15,6 +15,8 @@ import { IQuilombo } from 'app/shared/model/quilombo.model';
 import { getEntities as getQuilombos } from 'app/entities/quilombo/quilombo.reducer';
 import { ITipoDecisao } from 'app/shared/model/tipo-decisao.model';
 import { getEntities as getTipoDecisaos } from 'app/entities/tipo-decisao/tipo-decisao.reducer';
+import { IConcessaoLiminarCassada } from 'app/shared/model/concessao-liminar-cassada.model';
+import { getEntities as getConcessaoLiminarCassadas } from 'app/entities/concessao-liminar-cassada/concessao-liminar-cassada.reducer';
 import { getEntity, updateEntity, createEntity, setBlob, reset } from './processo.reducer';
 import { IProcesso } from 'app/shared/model/processo.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
@@ -27,11 +29,12 @@ export const ProcessoUpdate = (props: IProcessoUpdateProps) => {
   const [idsquilombo, setIdsquilombo] = useState([]);
   const [concessaoLiminarId, setConcessaoLiminarId] = useState('0');
   const [tipoDecisaoId, setTipoDecisaoId] = useState('0');
+  const [concessaoLiminarCassadaId, setConcessaoLiminarCassadaId] = useState('0');
   const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { processoEntity, concessaoLiminars, comarcas, quilombos, tipoDecisaos, loading, updating } = props;
+  const { processoEntity, concessaoLiminars, comarcas, quilombos, tipoDecisaos, concessaoLiminarCassadas, loading, updating } = props;
 
-  const { assunto, numeroProcessoJudicialPrimeiraInstanciaObservacoes } = processoEntity;
+  const { assunto, numeroProcessoJudicialPrimeiraInstanciaObservacoes, concessaoLimnarObservacoes } = processoEntity;
 
   const handleClose = () => {
     props.history.push('/processo' + props.location.search);
@@ -48,6 +51,7 @@ export const ProcessoUpdate = (props: IProcessoUpdateProps) => {
     props.getComarcas();
     props.getQuilombos();
     props.getTipoDecisaos();
+    props.getConcessaoLiminarCassadas();
   }, []);
 
   const onBlobChange = (isAnImage, name) => event => {
@@ -188,6 +192,24 @@ export const ProcessoUpdate = (props: IProcessoUpdateProps) => {
                 </Label>
               </AvGroup>
               <AvGroup>
+                <Label id="folhasProcessoConcessaoLiminarLabel" for="processo-folhasProcessoConcessaoLiminar">
+                  <Translate contentKey="cidhaApp.processo.folhasProcessoConcessaoLiminar">Folhas Processo Concessao Liminar</Translate>
+                </Label>
+                <AvField id="processo-folhasProcessoConcessaoLiminar" type="text" name="folhasProcessoConcessaoLiminar" />
+              </AvGroup>
+              <AvGroup>
+                <Label id="concessaoLimnarObservacoesLabel" for="processo-concessaoLimnarObservacoes">
+                  <Translate contentKey="cidhaApp.processo.concessaoLimnarObservacoes">Concessao Limnar Observacoes</Translate>
+                </Label>
+                <AvInput id="processo-concessaoLimnarObservacoes" type="textarea" name="concessaoLimnarObservacoes" />
+              </AvGroup>
+              <AvGroup>
+                <Label id="folhasProcessoCassacaoLabel" for="processo-folhasProcessoCassacao">
+                  <Translate contentKey="cidhaApp.processo.folhasProcessoCassacao">Folhas Processo Cassacao</Translate>
+                </Label>
+                <AvField id="processo-folhasProcessoCassacao" type="text" name="folhasProcessoCassacao" />
+              </AvGroup>
+              <AvGroup>
                 <Label for="processo-concessaoLiminar">
                   <Translate contentKey="cidhaApp.processo.concessaoLiminar">Concessao Liminar</Translate>
                 </Label>
@@ -261,6 +283,21 @@ export const ProcessoUpdate = (props: IProcessoUpdateProps) => {
                     : null}
                 </AvInput>
               </AvGroup>
+              <AvGroup>
+                <Label for="processo-concessaoLiminarCassada">
+                  <Translate contentKey="cidhaApp.processo.concessaoLiminarCassada">Concessao Liminar Cassada</Translate>
+                </Label>
+                <AvInput id="processo-concessaoLiminarCassada" type="select" className="form-control" name="concessaoLiminarCassada.id">
+                  <option value="" key="0" />
+                  {concessaoLiminarCassadas
+                    ? concessaoLiminarCassadas.map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.descricao}
+                        </option>
+                      ))
+                    : null}
+                </AvInput>
+              </AvGroup>
               <Button tag={Link} id="cancel-save" to="/processo" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
@@ -287,6 +324,7 @@ const mapStateToProps = (storeState: IRootState) => ({
   comarcas: storeState.comarca.entities,
   quilombos: storeState.quilombo.entities,
   tipoDecisaos: storeState.tipoDecisao.entities,
+  concessaoLiminarCassadas: storeState.concessaoLiminarCassada.entities,
   processoEntity: storeState.processo.entity,
   loading: storeState.processo.loading,
   updating: storeState.processo.updating,
@@ -298,6 +336,7 @@ const mapDispatchToProps = {
   getComarcas,
   getQuilombos,
   getTipoDecisaos,
+  getConcessaoLiminarCassadas,
   getEntity,
   updateEntity,
   setBlob,

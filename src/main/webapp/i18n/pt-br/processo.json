@@ -27,10 +27,14 @@
       "numeroProcessoJudicialPrimeiraInstanciaLink": "Numero Processo Judicial Primeira Instancia Link",
       "numeroProcessoJudicialPrimeiraInstanciaObservacoes": "Numero Processo Judicial Primeira Instancia Observacoes",
       "parecer": "Parecer",
+      "folhasProcessoConcessaoLiminar": "Folhas Processo Concessao Liminar",
+      "concessaoLimnarObservacoes": "Concessao Limnar Observacoes",
+      "folhasProcessoCassacao": "Folhas Processo Cassacao",
       "concessaoLiminar": "Concessao Liminar",
       "comarca": "Comarca",
       "quilombo": "Quilombo",
-      "tipoDecisao": "Tipo Decisao"
+      "tipoDecisao": "Tipo Decisao",
+      "concessaoLiminarCassada": "Concessao Liminar Cassada"
     }
   }
 }

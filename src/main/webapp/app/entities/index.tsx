@@ -9,6 +9,7 @@ import Quilombo from './quilombo';
 import Processo from './processo';
 import ConcessaoLiminar from './concessao-liminar';
 import TipoDecisao from './tipo-decisao';
+import ConcessaoLiminarCassada from './concessao-liminar-cassada';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 const Routes = ({ match }) => (
@@ -20,6 +21,7 @@ const Routes = ({ match }) => (
       <ErrorBoundaryRoute path={`${match.url}processo`} component={Processo} />
       <ErrorBoundaryRoute path={`${match.url}concessao-liminar`} component={ConcessaoLiminar} />
       <ErrorBoundaryRoute path={`${match.url}tipo-decisao`} component={TipoDecisao} />
+      <ErrorBoundaryRoute path={`${match.url}concessao-liminar-cassada`} component={ConcessaoLiminarCassada} />
       {/* jhipster-needle-add-route-path - JHipster will add routes here */}
     </Switch>
   </div>

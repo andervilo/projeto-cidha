@@ -98,6 +98,24 @@ export const ProcessoDetail = (props: IProcessoDetailProps) => {
           </dt>
           <dd>{processoEntity.parecer ? 'true' : 'false'}</dd>
           <dt>
+            <span id="folhasProcessoConcessaoLiminar">
+              <Translate contentKey="cidhaApp.processo.folhasProcessoConcessaoLiminar">Folhas Processo Concessao Liminar</Translate>
+            </span>
+          </dt>
+          <dd>{processoEntity.folhasProcessoConcessaoLiminar}</dd>
+          <dt>
+            <span id="concessaoLimnarObservacoes">
+              <Translate contentKey="cidhaApp.processo.concessaoLimnarObservacoes">Concessao Limnar Observacoes</Translate>
+            </span>
+          </dt>
+          <dd>{processoEntity.concessaoLimnarObservacoes}</dd>
+          <dt>
+            <span id="folhasProcessoCassacao">
+              <Translate contentKey="cidhaApp.processo.folhasProcessoCassacao">Folhas Processo Cassacao</Translate>
+            </span>
+          </dt>
+          <dd>{processoEntity.folhasProcessoCassacao}</dd>
+          <dt>
             <Translate contentKey="cidhaApp.processo.concessaoLiminar">Concessao Liminar</Translate>
           </dt>
           <dd>{processoEntity.concessaoLiminar ? processoEntity.concessaoLiminar.descricao : ''}</dd>
@@ -131,6 +149,10 @@ export const ProcessoDetail = (props: IProcessoDetailProps) => {
             <Translate contentKey="cidhaApp.processo.tipoDecisao">Tipo Decisao</Translate>
           </dt>
           <dd>{processoEntity.tipoDecisao ? processoEntity.tipoDecisao.descricao : ''}</dd>
+          <dt>
+            <Translate contentKey="cidhaApp.processo.concessaoLiminarCassada">Concessao Liminar Cassada</Translate>
+          </dt>
+          <dd>{processoEntity.concessaoLiminarCassada ? processoEntity.concessaoLiminarCassada.descricao : ''}</dd>
         </dl>
         <Button tag={Link} to="/processo" replace color="info">
           <FontAwesomeIcon icon="arrow-left" />{' '}

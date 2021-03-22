@@ -80,6 +80,15 @@ public class ConcessaoLiminarQueryService extends QueryService<ConcessaoLiminar>
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), ConcessaoLiminar_.id));
             }
+            if (criteria.getProcessosId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getProcessosId(),
+                            root -> root.join(ConcessaoLiminar_.processos, JoinType.LEFT).get(Processo_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

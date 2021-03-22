@@ -48,10 +48,22 @@
             <column name="parecer" type="boolean">
                 <constraints nullable="true" />
             </column>
+            <column name="folhas_processo_concessao_liminar" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="concessao_limnar_observacoes" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="folhas_processo_cassacao" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="concessao_liminar_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="tipo_decisao_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="concessao_liminar_cassada_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -110,6 +122,9 @@
             <column name="numero_processo_judicial_primeira_instancia_link" type="string"/>
             <column name="numero_processo_judicial_primeira_instancia_observacoes" type="clob"/>
             <column name="parecer" type="boolean"/>
+            <column name="folhas_processo_concessao_liminar" type="string"/>
+            <column name="concessao_limnar_observacoes" type="clob"/>
+            <column name="folhas_processo_cassacao" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

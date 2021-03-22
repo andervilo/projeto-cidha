@@ -37,7 +37,10 @@
     "otherModules": [],
     "blueprints": [],
     "prettierJava": true,
-    "lastLiquibaseTimestamp": 1616113302000
+    "lastLiquibaseTimestamp": 1616447154000,
+    "herokuAppName": "cidha",
+    "herokuDeployType": "git",
+    "herokuJavaVersion": "11"
   },
   "git-provider": "GitHub",
   "git-company": "andervilo",

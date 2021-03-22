@@ -19,9 +19,8 @@ public class Processo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
 
     @Column(name = "oficio")
     private String oficio;
@@ -60,6 +59,17 @@ public class Processo implements Serializable {
     @Column(name = "parecer")
     private Boolean parecer;
 
+    @Column(name = "folhas_processo_concessao_liminar")
+    private String folhasProcessoConcessaoLiminar;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(name = "concessao_limnar_observacoes")
+    private String concessaoLimnarObservacoes;
+
+    @Column(name = "folhas_processo_cassacao")
+    private String folhasProcessoCassacao;
+
     @ManyToOne
     @JsonIgnoreProperties(value = "processos", allowSetters = true)
     private ConcessaoLiminar concessaoLiminar;
@@ -85,6 +95,10 @@ public class Processo implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = "processos", allowSetters = true)
     private TipoDecisao tipoDecisao;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = "processos", allowSetters = true)
+    private ConcessaoLiminarCassada concessaoLiminarCassada;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -238,6 +252,45 @@ public class Processo implements Serializable {
         this.parecer = parecer;
     }
 
+    public String getFolhasProcessoConcessaoLiminar() {
+        return folhasProcessoConcessaoLiminar;
+    }
+
+    public Processo folhasProcessoConcessaoLiminar(String folhasProcessoConcessaoLiminar) {
+        this.folhasProcessoConcessaoLiminar = folhasProcessoConcessaoLiminar;
+        return this;
+    }
+
+    public void setFolhasProcessoConcessaoLiminar(String folhasProcessoConcessaoLiminar) {
+        this.folhasProcessoConcessaoLiminar = folhasProcessoConcessaoLiminar;
+    }
+
+    public String getConcessaoLimnarObservacoes() {
+        return concessaoLimnarObservacoes;
+    }
+
+    public Processo concessaoLimnarObservacoes(String concessaoLimnarObservacoes) {
+        this.concessaoLimnarObservacoes = concessaoLimnarObservacoes;
+        return this;
+    }
+
+    public void setConcessaoLimnarObservacoes(String concessaoLimnarObservacoes) {
+        this.concessaoLimnarObservacoes = concessaoLimnarObservacoes;
+    }
+
+    public String getFolhasProcessoCassacao() {
+        return folhasProcessoCassacao;
+    }
+
+    public Processo folhasProcessoCassacao(String folhasProcessoCassacao) {
+        this.folhasProcessoCassacao = folhasProcessoCassacao;
+        return this;
+    }
+
+    public void setFolhasProcessoCassacao(String folhasProcessoCassacao) {
+        this.folhasProcessoCassacao = folhasProcessoCassacao;
+    }
+
     public ConcessaoLiminar getConcessaoLiminar() {
         return concessaoLiminar;
     }
@@ -314,6 +367,19 @@ public class Processo implements Serializable {
         this.tipoDecisao = tipoDecisao;
     }
 
+    public ConcessaoLiminarCassada getConcessaoLiminarCassada() {
+        return concessaoLiminarCassada;
+    }
+
+    public Processo concessaoLiminarCassada(ConcessaoLiminarCassada concessaoLiminarCassada) {
+        this.concessaoLiminarCassada = concessaoLiminarCassada;
+        return this;
+    }
+
+    public void setConcessaoLiminarCassada(ConcessaoLiminarCassada concessaoLiminarCassada) {
+        this.concessaoLiminarCassada = concessaoLiminarCassada;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -348,6 +414,9 @@ public class Processo implements Serializable {
             ", numeroProcessoJudicialPrimeiraInstanciaLink='" + getNumeroProcessoJudicialPrimeiraInstanciaLink() + "'" +
             ", numeroProcessoJudicialPrimeiraInstanciaObservacoes='" + getNumeroProcessoJudicialPrimeiraInstanciaObservacoes() + "'" +
             ", parecer='" + isParecer() + "'" +
+            ", folhasProcessoConcessaoLiminar='" + getFolhasProcessoConcessaoLiminar() + "'" +
+            ", concessaoLimnarObservacoes='" + getConcessaoLimnarObservacoes() + "'" +
+            ", folhasProcessoCassacao='" + getFolhasProcessoCassacao() + "'" +
             "}";
     }
 }

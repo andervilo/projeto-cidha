@@ -17,6 +17,7 @@ export interface IQuilomboProps extends StateProps, DispatchProps, RouteComponen
 
 export const Quilombo = (props: IQuilomboProps) => {
   const [query, setQuery] = useState('');
+  const [forReset, setForReset] = useState(false);
 
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE), props.location.search)
@@ -72,6 +73,7 @@ export const Quilombo = (props: IQuilomboProps) => {
   const clear = () => {
     props.reset();
     setQuery('');
+    setForReset(true);
     setPaginationState({
       ...paginationState,
       activePage: 1,
@@ -99,11 +101,11 @@ export const Quilombo = (props: IQuilomboProps) => {
 
       <Filter filter="nome.contains" 
       placeholder="Filtrar Quilombos por nome" 
-      btnOnClickClear={clear} onSubmit={getAllEntities} setQuery={setQuery}/>
+      btnOnClickClear={clear} onSubmit={getAllEntities} setQuery={setQuery} isForReset={forReset}/>
       
       <div className="table-responsive">
         {quilomboList && quilomboList.length > 0 ? (
-          <Table responsive>
+          <Table responsive >
             <thead>
               <tr>
                 <th className="hand" onClick={sort('id')}>

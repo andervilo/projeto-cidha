@@ -2,6 +2,7 @@ import { IConcessaoLiminar } from 'app/shared/model/concessao-liminar.model';
 import { IComarca } from 'app/shared/model/comarca.model';
 import { IQuilombo } from 'app/shared/model/quilombo.model';
 import { ITipoDecisao } from 'app/shared/model/tipo-decisao.model';
+import { IConcessaoLiminarCassada } from 'app/shared/model/concessao-liminar-cassada.model';
 
 export interface IProcesso {
   id?: number;
@@ -16,10 +17,14 @@ export interface IProcesso {
   numeroProcessoJudicialPrimeiraInstanciaLink?: string;
   numeroProcessoJudicialPrimeiraInstanciaObservacoes?: any;
   parecer?: boolean;
+  folhasProcessoConcessaoLiminar?: string;
+  concessaoLimnarObservacoes?: any;
+  folhasProcessoCassacao?: string;
   concessaoLiminar?: IConcessaoLiminar;
   comarcas?: IComarca[];
   quilombos?: IQuilombo[];
   tipoDecisao?: ITipoDecisao;
+  concessaoLiminarCassada?: IConcessaoLiminarCassada;
 }
 
 export const defaultValue: Readonly<IProcesso> = {

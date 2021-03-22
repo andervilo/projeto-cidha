@@ -8,12 +8,12 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * A TipoDecisao.
+ * A ConcessaoLiminarCassada.
  */
 @Entity
-@Table(name = "tipo_decisao")
+@Table(name = "concessao_liminar_cassada")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class TipoDecisao implements Serializable {
+public class ConcessaoLiminarCassada implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -23,7 +23,7 @@ public class TipoDecisao implements Serializable {
     @Column(name = "descricao")
     private String descricao;
 
-    @OneToMany(mappedBy = "tipoDecisao")
+    @OneToMany(mappedBy = "concessaoLiminarCassada")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Processo> processos = new HashSet<>();
 
@@ -40,7 +40,7 @@ public class TipoDecisao implements Serializable {
         return descricao;
     }
 
-    public TipoDecisao descricao(String descricao) {
+    public ConcessaoLiminarCassada descricao(String descricao) {
         this.descricao = descricao;
         return this;
     }
@@ -53,20 +53,20 @@ public class TipoDecisao implements Serializable {
         return processos;
     }
 
-    public TipoDecisao processos(Set<Processo> processos) {
+    public ConcessaoLiminarCassada processos(Set<Processo> processos) {
         this.processos = processos;
         return this;
     }
 
-    public TipoDecisao addProcesso(Processo processo) {
+    public ConcessaoLiminarCassada addProcessos(Processo processo) {
         this.processos.add(processo);
-        processo.setTipoDecisao(this);
+        processo.setConcessaoLiminarCassada(this);
         return this;
     }
 
-    public TipoDecisao removeProcesso(Processo processo) {
+    public ConcessaoLiminarCassada removeProcessos(Processo processo) {
         this.processos.remove(processo);
-        processo.setTipoDecisao(null);
+        processo.setConcessaoLiminarCassada(null);
         return this;
     }
 
@@ -81,10 +81,10 @@ public class TipoDecisao implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof TipoDecisao)) {
+        if (!(o instanceof ConcessaoLiminarCassada)) {
             return false;
         }
-        return id != null && id.equals(((TipoDecisao) o).id);
+        return id != null && id.equals(((ConcessaoLiminarCassada) o).id);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class TipoDecisao implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        return "TipoDecisao{" +
+        return "ConcessaoLiminarCassada{" +
             "id=" + getId() +
             ", descricao='" + getDescricao() + "'" +
             "}";

@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import br.com.cidha.CidhaApp;
 import br.com.cidha.domain.Comarca;
 import br.com.cidha.domain.ConcessaoLiminar;
+import br.com.cidha.domain.ConcessaoLiminarCassada;
 import br.com.cidha.domain.Processo;
 import br.com.cidha.domain.Quilombo;
 import br.com.cidha.domain.TipoDecisao;
@@ -76,6 +77,15 @@ public class ProcessoResourceIT {
     private static final Boolean DEFAULT_PARECER = false;
     private static final Boolean UPDATED_PARECER = true;
 
+    private static final String DEFAULT_FOLHAS_PROCESSO_CONCESSAO_LIMINAR = "AAAAAAAAAA";
+    private static final String UPDATED_FOLHAS_PROCESSO_CONCESSAO_LIMINAR = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CONCESSAO_LIMNAR_OBSERVACOES = "AAAAAAAAAA";
+    private static final String UPDATED_CONCESSAO_LIMNAR_OBSERVACOES = "BBBBBBBBBB";
+
+    private static final String DEFAULT_FOLHAS_PROCESSO_CASSACAO = "AAAAAAAAAA";
+    private static final String UPDATED_FOLHAS_PROCESSO_CASSACAO = "BBBBBBBBBB";
+
     @Autowired
     private ProcessoRepository processoRepository;
 
@@ -117,7 +127,10 @@ public class ProcessoResourceIT {
             .numeroProcessoJudicialPrimeiraInstancia(DEFAULT_NUMERO_PROCESSO_JUDICIAL_PRIMEIRA_INSTANCIA)
             .numeroProcessoJudicialPrimeiraInstanciaLink(DEFAULT_NUMERO_PROCESSO_JUDICIAL_PRIMEIRA_INSTANCIA_LINK)
             .numeroProcessoJudicialPrimeiraInstanciaObservacoes(DEFAULT_NUMERO_PROCESSO_JUDICIAL_PRIMEIRA_INSTANCIA_OBSERVACOES)
-            .parecer(DEFAULT_PARECER);
+            .parecer(DEFAULT_PARECER)
+            .folhasProcessoConcessaoLiminar(DEFAULT_FOLHAS_PROCESSO_CONCESSAO_LIMINAR)
+            .concessaoLimnarObservacoes(DEFAULT_CONCESSAO_LIMNAR_OBSERVACOES)
+            .folhasProcessoCassacao(DEFAULT_FOLHAS_PROCESSO_CASSACAO);
         return processo;
     }
 
@@ -139,7 +152,10 @@ public class ProcessoResourceIT {
             .numeroProcessoJudicialPrimeiraInstancia(UPDATED_NUMERO_PROCESSO_JUDICIAL_PRIMEIRA_INSTANCIA)
             .numeroProcessoJudicialPrimeiraInstanciaLink(UPDATED_NUMERO_PROCESSO_JUDICIAL_PRIMEIRA_INSTANCIA_LINK)
             .numeroProcessoJudicialPrimeiraInstanciaObservacoes(UPDATED_NUMERO_PROCESSO_JUDICIAL_PRIMEIRA_INSTANCIA_OBSERVACOES)
-            .parecer(UPDATED_PARECER);
+            .parecer(UPDATED_PARECER)
+            .folhasProcessoConcessaoLiminar(UPDATED_FOLHAS_PROCESSO_CONCESSAO_LIMINAR)
+            .concessaoLimnarObservacoes(UPDATED_CONCESSAO_LIMNAR_OBSERVACOES)
+            .folhasProcessoCassacao(UPDATED_FOLHAS_PROCESSO_CASSACAO);
         return processo;
     }
 
@@ -175,6 +191,9 @@ public class ProcessoResourceIT {
         assertThat(testProcesso.getNumeroProcessoJudicialPrimeiraInstanciaObservacoes())
             .isEqualTo(DEFAULT_NUMERO_PROCESSO_JUDICIAL_PRIMEIRA_INSTANCIA_OBSERVACOES);
         assertThat(testProcesso.isParecer()).isEqualTo(DEFAULT_PARECER);
+        assertThat(testProcesso.getFolhasProcessoConcessaoLiminar()).isEqualTo(DEFAULT_FOLHAS_PROCESSO_CONCESSAO_LIMINAR);
+        assertThat(testProcesso.getConcessaoLimnarObservacoes()).isEqualTo(DEFAULT_CONCESSAO_LIMNAR_OBSERVACOES);
+        assertThat(testProcesso.getFolhasProcessoCassacao()).isEqualTo(DEFAULT_FOLHAS_PROCESSO_CASSACAO);
     }
 
     @Test
@@ -226,7 +245,10 @@ public class ProcessoResourceIT {
                 jsonPath("$.[*].numeroProcessoJudicialPrimeiraInstanciaObservacoes")
                     .value(hasItem(DEFAULT_NUMERO_PROCESSO_JUDICIAL_PRIMEIRA_INSTANCIA_OBSERVACOES.toString()))
             )
-            .andExpect(jsonPath("$.[*].parecer").value(hasItem(DEFAULT_PARECER.booleanValue())));
+            .andExpect(jsonPath("$.[*].parecer").value(hasItem(DEFAULT_PARECER.booleanValue())))
+            .andExpect(jsonPath("$.[*].folhasProcessoConcessaoLiminar").value(hasItem(DEFAULT_FOLHAS_PROCESSO_CONCESSAO_LIMINAR)))
+            .andExpect(jsonPath("$.[*].concessaoLimnarObservacoes").value(hasItem(DEFAULT_CONCESSAO_LIMNAR_OBSERVACOES.toString())))
+            .andExpect(jsonPath("$.[*].folhasProcessoCassacao").value(hasItem(DEFAULT_FOLHAS_PROCESSO_CASSACAO)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -274,7 +296,10 @@ public class ProcessoResourceIT {
                 jsonPath("$.numeroProcessoJudicialPrimeiraInstanciaObservacoes")
                     .value(DEFAULT_NUMERO_PROCESSO_JUDICIAL_PRIMEIRA_INSTANCIA_OBSERVACOES.toString())
             )
-            .andExpect(jsonPath("$.parecer").value(DEFAULT_PARECER.booleanValue()));
+            .andExpect(jsonPath("$.parecer").value(DEFAULT_PARECER.booleanValue()))
+            .andExpect(jsonPath("$.folhasProcessoConcessaoLiminar").value(DEFAULT_FOLHAS_PROCESSO_CONCESSAO_LIMINAR))
+            .andExpect(jsonPath("$.concessaoLimnarObservacoes").value(DEFAULT_CONCESSAO_LIMNAR_OBSERVACOES.toString()))
+            .andExpect(jsonPath("$.folhasProcessoCassacao").value(DEFAULT_FOLHAS_PROCESSO_CASSACAO));
     }
 
     @Test
@@ -1021,6 +1046,169 @@ public class ProcessoResourceIT {
 
     @Test
     @Transactional
+    public void getAllProcessosByFolhasProcessoConcessaoLiminarIsEqualToSomething() throws Exception {
+        // Initialize the database
+        processoRepository.saveAndFlush(processo);
+
+        // Get all the processoList where folhasProcessoConcessaoLiminar equals to DEFAULT_FOLHAS_PROCESSO_CONCESSAO_LIMINAR
+        defaultProcessoShouldBeFound("folhasProcessoConcessaoLiminar.equals=" + DEFAULT_FOLHAS_PROCESSO_CONCESSAO_LIMINAR);
+
+        // Get all the processoList where folhasProcessoConcessaoLiminar equals to UPDATED_FOLHAS_PROCESSO_CONCESSAO_LIMINAR
+        defaultProcessoShouldNotBeFound("folhasProcessoConcessaoLiminar.equals=" + UPDATED_FOLHAS_PROCESSO_CONCESSAO_LIMINAR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllProcessosByFolhasProcessoConcessaoLiminarIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        processoRepository.saveAndFlush(processo);
+
+        // Get all the processoList where folhasProcessoConcessaoLiminar not equals to DEFAULT_FOLHAS_PROCESSO_CONCESSAO_LIMINAR
+        defaultProcessoShouldNotBeFound("folhasProcessoConcessaoLiminar.notEquals=" + DEFAULT_FOLHAS_PROCESSO_CONCESSAO_LIMINAR);
+
+        // Get all the processoList where folhasProcessoConcessaoLiminar not equals to UPDATED_FOLHAS_PROCESSO_CONCESSAO_LIMINAR
+        defaultProcessoShouldBeFound("folhasProcessoConcessaoLiminar.notEquals=" + UPDATED_FOLHAS_PROCESSO_CONCESSAO_LIMINAR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllProcessosByFolhasProcessoConcessaoLiminarIsInShouldWork() throws Exception {
+        // Initialize the database
+        processoRepository.saveAndFlush(processo);
+
+        // Get all the processoList where folhasProcessoConcessaoLiminar in DEFAULT_FOLHAS_PROCESSO_CONCESSAO_LIMINAR or UPDATED_FOLHAS_PROCESSO_CONCESSAO_LIMINAR
+        defaultProcessoShouldBeFound(
+            "folhasProcessoConcessaoLiminar.in=" +
+            DEFAULT_FOLHAS_PROCESSO_CONCESSAO_LIMINAR +
+            "," +
+            UPDATED_FOLHAS_PROCESSO_CONCESSAO_LIMINAR
+        );
+
+        // Get all the processoList where folhasProcessoConcessaoLiminar equals to UPDATED_FOLHAS_PROCESSO_CONCESSAO_LIMINAR
+        defaultProcessoShouldNotBeFound("folhasProcessoConcessaoLiminar.in=" + UPDATED_FOLHAS_PROCESSO_CONCESSAO_LIMINAR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllProcessosByFolhasProcessoConcessaoLiminarIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        processoRepository.saveAndFlush(processo);
+
+        // Get all the processoList where folhasProcessoConcessaoLiminar is not null
+        defaultProcessoShouldBeFound("folhasProcessoConcessaoLiminar.specified=true");
+
+        // Get all the processoList where folhasProcessoConcessaoLiminar is null
+        defaultProcessoShouldNotBeFound("folhasProcessoConcessaoLiminar.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllProcessosByFolhasProcessoConcessaoLiminarContainsSomething() throws Exception {
+        // Initialize the database
+        processoRepository.saveAndFlush(processo);
+
+        // Get all the processoList where folhasProcessoConcessaoLiminar contains DEFAULT_FOLHAS_PROCESSO_CONCESSAO_LIMINAR
+        defaultProcessoShouldBeFound("folhasProcessoConcessaoLiminar.contains=" + DEFAULT_FOLHAS_PROCESSO_CONCESSAO_LIMINAR);
+
+        // Get all the processoList where folhasProcessoConcessaoLiminar contains UPDATED_FOLHAS_PROCESSO_CONCESSAO_LIMINAR
+        defaultProcessoShouldNotBeFound("folhasProcessoConcessaoLiminar.contains=" + UPDATED_FOLHAS_PROCESSO_CONCESSAO_LIMINAR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllProcessosByFolhasProcessoConcessaoLiminarNotContainsSomething() throws Exception {
+        // Initialize the database
+        processoRepository.saveAndFlush(processo);
+
+        // Get all the processoList where folhasProcessoConcessaoLiminar does not contain DEFAULT_FOLHAS_PROCESSO_CONCESSAO_LIMINAR
+        defaultProcessoShouldNotBeFound("folhasProcessoConcessaoLiminar.doesNotContain=" + DEFAULT_FOLHAS_PROCESSO_CONCESSAO_LIMINAR);
+
+        // Get all the processoList where folhasProcessoConcessaoLiminar does not contain UPDATED_FOLHAS_PROCESSO_CONCESSAO_LIMINAR
+        defaultProcessoShouldBeFound("folhasProcessoConcessaoLiminar.doesNotContain=" + UPDATED_FOLHAS_PROCESSO_CONCESSAO_LIMINAR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllProcessosByFolhasProcessoCassacaoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        processoRepository.saveAndFlush(processo);
+
+        // Get all the processoList where folhasProcessoCassacao equals to DEFAULT_FOLHAS_PROCESSO_CASSACAO
+        defaultProcessoShouldBeFound("folhasProcessoCassacao.equals=" + DEFAULT_FOLHAS_PROCESSO_CASSACAO);
+
+        // Get all the processoList where folhasProcessoCassacao equals to UPDATED_FOLHAS_PROCESSO_CASSACAO
+        defaultProcessoShouldNotBeFound("folhasProcessoCassacao.equals=" + UPDATED_FOLHAS_PROCESSO_CASSACAO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllProcessosByFolhasProcessoCassacaoIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        processoRepository.saveAndFlush(processo);
+
+        // Get all the processoList where folhasProcessoCassacao not equals to DEFAULT_FOLHAS_PROCESSO_CASSACAO
+        defaultProcessoShouldNotBeFound("folhasProcessoCassacao.notEquals=" + DEFAULT_FOLHAS_PROCESSO_CASSACAO);
+
+        // Get all the processoList where folhasProcessoCassacao not equals to UPDATED_FOLHAS_PROCESSO_CASSACAO
+        defaultProcessoShouldBeFound("folhasProcessoCassacao.notEquals=" + UPDATED_FOLHAS_PROCESSO_CASSACAO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllProcessosByFolhasProcessoCassacaoIsInShouldWork() throws Exception {
+        // Initialize the database
+        processoRepository.saveAndFlush(processo);
+
+        // Get all the processoList where folhasProcessoCassacao in DEFAULT_FOLHAS_PROCESSO_CASSACAO or UPDATED_FOLHAS_PROCESSO_CASSACAO
+        defaultProcessoShouldBeFound(
+            "folhasProcessoCassacao.in=" + DEFAULT_FOLHAS_PROCESSO_CASSACAO + "," + UPDATED_FOLHAS_PROCESSO_CASSACAO
+        );
+
+        // Get all the processoList where folhasProcessoCassacao equals to UPDATED_FOLHAS_PROCESSO_CASSACAO
+        defaultProcessoShouldNotBeFound("folhasProcessoCassacao.in=" + UPDATED_FOLHAS_PROCESSO_CASSACAO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllProcessosByFolhasProcessoCassacaoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        processoRepository.saveAndFlush(processo);
+
+        // Get all the processoList where folhasProcessoCassacao is not null
+        defaultProcessoShouldBeFound("folhasProcessoCassacao.specified=true");
+
+        // Get all the processoList where folhasProcessoCassacao is null
+        defaultProcessoShouldNotBeFound("folhasProcessoCassacao.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllProcessosByFolhasProcessoCassacaoContainsSomething() throws Exception {
+        // Initialize the database
+        processoRepository.saveAndFlush(processo);
+
+        // Get all the processoList where folhasProcessoCassacao contains DEFAULT_FOLHAS_PROCESSO_CASSACAO
+        defaultProcessoShouldBeFound("folhasProcessoCassacao.contains=" + DEFAULT_FOLHAS_PROCESSO_CASSACAO);
+
+        // Get all the processoList where folhasProcessoCassacao contains UPDATED_FOLHAS_PROCESSO_CASSACAO
+        defaultProcessoShouldNotBeFound("folhasProcessoCassacao.contains=" + UPDATED_FOLHAS_PROCESSO_CASSACAO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllProcessosByFolhasProcessoCassacaoNotContainsSomething() throws Exception {
+        // Initialize the database
+        processoRepository.saveAndFlush(processo);
+
+        // Get all the processoList where folhasProcessoCassacao does not contain DEFAULT_FOLHAS_PROCESSO_CASSACAO
+        defaultProcessoShouldNotBeFound("folhasProcessoCassacao.doesNotContain=" + DEFAULT_FOLHAS_PROCESSO_CASSACAO);
+
+        // Get all the processoList where folhasProcessoCassacao does not contain UPDATED_FOLHAS_PROCESSO_CASSACAO
+        defaultProcessoShouldBeFound("folhasProcessoCassacao.doesNotContain=" + UPDATED_FOLHAS_PROCESSO_CASSACAO);
+    }
+
+    @Test
+    @Transactional
     public void getAllProcessosByConcessaoLiminarIsEqualToSomething() throws Exception {
         // Initialize the database
         processoRepository.saveAndFlush(processo);
@@ -1095,6 +1283,25 @@ public class ProcessoResourceIT {
         defaultProcessoShouldNotBeFound("tipoDecisaoId.equals=" + (tipoDecisaoId + 1));
     }
 
+    @Test
+    @Transactional
+    public void getAllProcessosByConcessaoLiminarCassadaIsEqualToSomething() throws Exception {
+        // Initialize the database
+        processoRepository.saveAndFlush(processo);
+        ConcessaoLiminarCassada concessaoLiminarCassada = ConcessaoLiminarCassadaResourceIT.createEntity(em);
+        em.persist(concessaoLiminarCassada);
+        em.flush();
+        processo.setConcessaoLiminarCassada(concessaoLiminarCassada);
+        processoRepository.saveAndFlush(processo);
+        Long concessaoLiminarCassadaId = concessaoLiminarCassada.getId();
+
+        // Get all the processoList where concessaoLiminarCassada equals to concessaoLiminarCassadaId
+        defaultProcessoShouldBeFound("concessaoLiminarCassadaId.equals=" + concessaoLiminarCassadaId);
+
+        // Get all the processoList where concessaoLiminarCassada equals to concessaoLiminarCassadaId + 1
+        defaultProcessoShouldNotBeFound("concessaoLiminarCassadaId.equals=" + (concessaoLiminarCassadaId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1123,7 +1330,10 @@ public class ProcessoResourceIT {
                 jsonPath("$.[*].numeroProcessoJudicialPrimeiraInstanciaObservacoes")
                     .value(hasItem(DEFAULT_NUMERO_PROCESSO_JUDICIAL_PRIMEIRA_INSTANCIA_OBSERVACOES.toString()))
             )
-            .andExpect(jsonPath("$.[*].parecer").value(hasItem(DEFAULT_PARECER.booleanValue())));
+            .andExpect(jsonPath("$.[*].parecer").value(hasItem(DEFAULT_PARECER.booleanValue())))
+            .andExpect(jsonPath("$.[*].folhasProcessoConcessaoLiminar").value(hasItem(DEFAULT_FOLHAS_PROCESSO_CONCESSAO_LIMINAR)))
+            .andExpect(jsonPath("$.[*].concessaoLimnarObservacoes").value(hasItem(DEFAULT_CONCESSAO_LIMNAR_OBSERVACOES.toString())))
+            .andExpect(jsonPath("$.[*].folhasProcessoCassacao").value(hasItem(DEFAULT_FOLHAS_PROCESSO_CASSACAO)));
 
         // Check, that the count call also returns 1
         restProcessoMockMvc
@@ -1182,7 +1392,10 @@ public class ProcessoResourceIT {
             .numeroProcessoJudicialPrimeiraInstancia(UPDATED_NUMERO_PROCESSO_JUDICIAL_PRIMEIRA_INSTANCIA)
             .numeroProcessoJudicialPrimeiraInstanciaLink(UPDATED_NUMERO_PROCESSO_JUDICIAL_PRIMEIRA_INSTANCIA_LINK)
             .numeroProcessoJudicialPrimeiraInstanciaObservacoes(UPDATED_NUMERO_PROCESSO_JUDICIAL_PRIMEIRA_INSTANCIA_OBSERVACOES)
-            .parecer(UPDATED_PARECER);
+            .parecer(UPDATED_PARECER)
+            .folhasProcessoConcessaoLiminar(UPDATED_FOLHAS_PROCESSO_CONCESSAO_LIMINAR)
+            .concessaoLimnarObservacoes(UPDATED_CONCESSAO_LIMNAR_OBSERVACOES)
+            .folhasProcessoCassacao(UPDATED_FOLHAS_PROCESSO_CASSACAO);
 
         restProcessoMockMvc
             .perform(
@@ -1208,6 +1421,9 @@ public class ProcessoResourceIT {
         assertThat(testProcesso.getNumeroProcessoJudicialPrimeiraInstanciaObservacoes())
             .isEqualTo(UPDATED_NUMERO_PROCESSO_JUDICIAL_PRIMEIRA_INSTANCIA_OBSERVACOES);
         assertThat(testProcesso.isParecer()).isEqualTo(UPDATED_PARECER);
+        assertThat(testProcesso.getFolhasProcessoConcessaoLiminar()).isEqualTo(UPDATED_FOLHAS_PROCESSO_CONCESSAO_LIMINAR);
+        assertThat(testProcesso.getConcessaoLimnarObservacoes()).isEqualTo(UPDATED_CONCESSAO_LIMNAR_OBSERVACOES);
+        assertThat(testProcesso.getFolhasProcessoCassacao()).isEqualTo(UPDATED_FOLHAS_PROCESSO_CASSACAO);
     }
 
     @Test

@@ -7,7 +7,14 @@
       "fieldTypeBlobContent": "text"
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipName": "processos",
+      "otherEntityName": "processo",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "concessaoLiminar"
+    }
+  ],
   "changelogDate": "20210318151938",
   "entityTableName": "concessao_liminar",
   "dto": "no",
@@ -18,5 +25,7 @@
   "readOnly": false,
   "embedded": false,
   "clientRootFolder": "",
-  "applications": "*"
+  "applications": "*",
+  "searchEngine": false,
+  "databaseType": "sql"
 }

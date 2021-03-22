@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import br.com.cidha.CidhaApp;
 import br.com.cidha.domain.ConcessaoLiminar;
+import br.com.cidha.domain.Processo;
 import br.com.cidha.repository.ConcessaoLiminarRepository;
 import br.com.cidha.service.ConcessaoLiminarQueryService;
 import br.com.cidha.service.ConcessaoLiminarService;
@@ -166,6 +167,25 @@ public class ConcessaoLiminarResourceIT {
 
         defaultConcessaoLiminarShouldBeFound("id.lessThanOrEqual=" + id);
         defaultConcessaoLiminarShouldNotBeFound("id.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    public void getAllConcessaoLiminarsByProcessosIsEqualToSomething() throws Exception {
+        // Initialize the database
+        concessaoLiminarRepository.saveAndFlush(concessaoLiminar);
+        Processo processos = ProcessoResourceIT.createEntity(em);
+        em.persist(processos);
+        em.flush();
+        concessaoLiminar.addProcessos(processos);
+        concessaoLiminarRepository.saveAndFlush(concessaoLiminar);
+        Long processosId = processos.getId();
+
+        // Get all the concessaoLiminarList where processos equals to processosId
+        defaultConcessaoLiminarShouldBeFound("processosId.equals=" + processosId);
+
+        // Get all the concessaoLiminarList where processos equals to processosId + 1
+        defaultConcessaoLiminarShouldNotBeFound("processosId.equals=" + (processosId + 1));
     }
 
     /**

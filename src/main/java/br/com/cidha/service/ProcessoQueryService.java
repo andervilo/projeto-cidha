@@ -122,6 +122,16 @@ public class ProcessoQueryService extends QueryService<Processo> {
             if (criteria.getParecer() != null) {
                 specification = specification.and(buildSpecification(criteria.getParecer(), Processo_.parecer));
             }
+            if (criteria.getFolhasProcessoConcessaoLiminar() != null) {
+                specification =
+                    specification.and(
+                        buildStringSpecification(criteria.getFolhasProcessoConcessaoLiminar(), Processo_.folhasProcessoConcessaoLiminar)
+                    );
+            }
+            if (criteria.getFolhasProcessoCassacao() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getFolhasProcessoCassacao(), Processo_.folhasProcessoCassacao));
+            }
             if (criteria.getConcessaoLiminarId() != null) {
                 specification =
                     specification.and(
@@ -152,6 +162,15 @@ public class ProcessoQueryService extends QueryService<Processo> {
                         buildSpecification(
                             criteria.getTipoDecisaoId(),
                             root -> root.join(Processo_.tipoDecisao, JoinType.LEFT).get(TipoDecisao_.id)
+                        )
+                    );
+            }
+            if (criteria.getConcessaoLiminarCassadaId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getConcessaoLiminarCassadaId(),
+                            root -> root.join(Processo_.concessaoLiminarCassada, JoinType.LEFT).get(ConcessaoLiminarCassada_.id)
                         )
                     );
             }

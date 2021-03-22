@@ -1,6 +1,8 @@
 package br.com.cidha.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -16,14 +18,17 @@ public class ConcessaoLiminar implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "descricao")
     private String descricao;
+
+    @OneToMany(mappedBy = "concessaoLiminar")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<Processo> processos = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -45,6 +50,31 @@ public class ConcessaoLiminar implements Serializable {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public Set<Processo> getProcessos() {
+        return processos;
+    }
+
+    public ConcessaoLiminar processos(Set<Processo> processos) {
+        this.processos = processos;
+        return this;
+    }
+
+    public ConcessaoLiminar addProcessos(Processo processo) {
+        this.processos.add(processo);
+        processo.setConcessaoLiminar(this);
+        return this;
+    }
+
+    public ConcessaoLiminar removeProcessos(Processo processo) {
+        this.processos.remove(processo);
+        processo.setConcessaoLiminar(null);
+        return this;
+    }
+
+    public void setProcessos(Set<Processo> processos) {
+        this.processos = processos;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

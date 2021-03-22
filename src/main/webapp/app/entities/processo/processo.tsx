@@ -127,11 +127,27 @@ export const Processo = (props: IProcessoProps) => {
                 <th className="hand" onClick={sort('parecer')}>
                   <Translate contentKey="cidhaApp.processo.parecer">Parecer</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
+                <th className="hand" onClick={sort('folhasProcessoConcessaoLiminar')}>
+                  <Translate contentKey="cidhaApp.processo.folhasProcessoConcessaoLiminar">Folhas Processo Concessao Liminar</Translate>{' '}
+                  <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={sort('concessaoLimnarObservacoes')}>
+                  <Translate contentKey="cidhaApp.processo.concessaoLimnarObservacoes">Concessao Limnar Observacoes</Translate>{' '}
+                  <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={sort('folhasProcessoCassacao')}>
+                  <Translate contentKey="cidhaApp.processo.folhasProcessoCassacao">Folhas Processo Cassacao</Translate>{' '}
+                  <FontAwesomeIcon icon="sort" />
+                </th>
                 <th>
                   <Translate contentKey="cidhaApp.processo.concessaoLiminar">Concessao Liminar</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
                   <Translate contentKey="cidhaApp.processo.tipoDecisao">Tipo Decisao</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th>
+                  <Translate contentKey="cidhaApp.processo.concessaoLiminarCassada">Concessao Liminar Cassada</Translate>{' '}
+                  <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
@@ -155,6 +171,9 @@ export const Processo = (props: IProcessoProps) => {
                   <td>{processo.numeroProcessoJudicialPrimeiraInstanciaLink}</td>
                   <td>{processo.numeroProcessoJudicialPrimeiraInstanciaObservacoes}</td>
                   <td>{processo.parecer ? 'true' : 'false'}</td>
+                  <td>{processo.folhasProcessoConcessaoLiminar}</td>
+                  <td>{processo.concessaoLimnarObservacoes}</td>
+                  <td>{processo.folhasProcessoCassacao}</td>
                   <td>
                     {processo.concessaoLiminar ? (
                       <Link to={`concessao-liminar/${processo.concessaoLiminar.id}`}>{processo.concessaoLiminar.descricao}</Link>
@@ -165,6 +184,15 @@ export const Processo = (props: IProcessoProps) => {
                   <td>
                     {processo.tipoDecisao ? (
                       <Link to={`tipo-decisao/${processo.tipoDecisao.id}`}>{processo.tipoDecisao.descricao}</Link>
+                    ) : (
+                      ''
+                    )}
+                  </td>
+                  <td>
+                    {processo.concessaoLiminarCassada ? (
+                      <Link to={`concessao-liminar-cassada/${processo.concessaoLiminarCassada.id}`}>
+                        {processo.concessaoLiminarCassada.descricao}
+                      </Link>
                     ) : (
                       ''
                     )}
