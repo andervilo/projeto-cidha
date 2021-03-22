@@ -729,7 +729,7 @@
 							<requireJavaVersion>
 								<message>You are running an incompatible version of Java.
 									JHipster supports JDK 8 to 14.</message>
-								<version>[1.8,15)</version>
+								<version>1.8</version>
 							</requireJavaVersion>
 						</rules>
 					</configuration>
